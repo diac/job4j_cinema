@@ -3,3 +3,4 @@ target
 .idea
 /testdb.mv.db
 /testdb.trace.db
+/src/main/resources/db.properties
