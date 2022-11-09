@@ -36,11 +36,14 @@ public class UserDBRepositoryTest {
 
         );
         repository.add(user);
-        String updatedUsername = username + "_updated";
-        user.setUsername(updatedUsername);
+        user.setUsername(user.getUsername() + "_updated");
+        user.setEmail(user.getEmail() + "_updated");
+        user.setPhone(user.getPhone() + "_updated");
         repository.update(user);
         User userInDb = repository.findById(user.getId());
-        assertThat(userInDb.getUsername()).isEqualTo(updatedUsername);
+        assertThat(userInDb.getUsername()).isEqualTo(user.getUsername());
+        assertThat(userInDb.getEmail()).isEqualTo(user.getEmail());
+        assertThat(userInDb.getPhone()).isEqualTo(user.getPhone());
     }
 
     @Test
