@@ -1,23 +1,22 @@
 package ru.job4j.cinema.repository;
 
-import org.junit.jupiter.api.Disabled;
 import org.junit.jupiter.api.Test;
+import ru.job4j.cinema.Main;
 import ru.job4j.cinema.model.User;
 
-import static org.assertj.core.api.Assertions.*;
+import static org.assertj.core.api.Assertions.assertThat;
 
-@Disabled
 public class UserDBRepositoryTest {
 
     @Test
     public void whenCreateUser() {
-        UserRepository repository = new UserDBRepository();
+        UserRepository repository = new UserDBRepository(new Main().loadPool());
         String username = String.valueOf(System.currentTimeMillis());
         User user = new User(
                 0,
                 username,
                 username + "@test.text",
-                "1111111111"
+                username
 
         );
         repository.add(user);
@@ -27,31 +26,32 @@ public class UserDBRepositoryTest {
 
     @Test
     public void whenUpdateUser() {
-        UserRepository repository = new UserDBRepository();
+        UserRepository repository = new UserDBRepository(new Main().loadPool());
         String username = String.valueOf(System.currentTimeMillis());
         User user = new User(
                 0,
                 username,
                 username + "@test.text",
-                "1111111111"
+                username
 
         );
         repository.add(user);
         String updatedUsername = username + "_updated";
         user.setUsername(updatedUsername);
+        repository.update(user);
         User userInDb = repository.findById(user.getId());
         assertThat(userInDb.getUsername()).isEqualTo(updatedUsername);
     }
 
     @Test
     public void whenDeleteUser() {
-        UserRepository repository = new UserDBRepository();
+        UserRepository repository = new UserDBRepository(new Main().loadPool());
         String username = String.valueOf(System.currentTimeMillis());
         User user = new User(
                 0,
                 username,
                 username + "@test.text",
-                "1111111111"
+                username
 
         );
         repository.add(user);

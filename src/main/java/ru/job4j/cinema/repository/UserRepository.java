@@ -12,7 +12,7 @@ public interface UserRepository {
 
     User add(User user);
 
-    User update(User user);
+    boolean update(User user);
 
     boolean delete(User user);
 }
