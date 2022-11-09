@@ -17,7 +17,7 @@ public class Main {
         try (BufferedReader io = new BufferedReader(
                 new InputStreamReader(
                         Main.class.getClassLoader()
-                                .getResourceAsStream("db.properties.example")
+                                .getResourceAsStream("db.properties")
                 )
         )) {
             cfg.load(io);
