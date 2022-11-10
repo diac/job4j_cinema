@@ -115,7 +115,8 @@ public class UserDBRepository implements UserRepository {
      * @return Объект User, соответствующий новой созданной записи в БД
      */
     @Override
-    public User add(User user) {
+    public Optional<User> add(User user) {
+        Optional<User> result = Optional.empty();
         try (
                 Connection connection = pool.getConnection();
                 PreparedStatement statement = connection.prepareStatement(
@@ -130,12 +131,13 @@ public class UserDBRepository implements UserRepository {
             try (ResultSet id = statement.getGeneratedKeys()) {
                 if (id.next()) {
                     user.setId(id.getInt(1));
+                    result = Optional.of(user);
                 }
             }
         } catch (SQLException e) {
             LOG.error(e.getMessage(), e);
         }
-        return user;
+        return result;
     }
 
     /**

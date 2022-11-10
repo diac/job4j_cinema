@@ -11,7 +11,7 @@ public interface UserRepository {
 
     Optional<User> findById(int id);
 
-    User add(User user);
+    Optional<User> add(User user);
 
     boolean update(User user);
 

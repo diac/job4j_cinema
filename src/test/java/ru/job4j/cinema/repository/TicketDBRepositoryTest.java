@@ -16,7 +16,7 @@ public class TicketDBRepositoryTest {
         UserRepository userRepository = new UserDBRepository(new Main().loadPool());
         SessionRepository sessionRepository = new SessionDBRepository(new Main().loadPool());
         String name = String.valueOf(System.currentTimeMillis());
-        User user = userRepository.add(new User(0, name, name, name));
+        User user = userRepository.add(new User(0, name, name, name)).orElse(null);
         Session session = sessionRepository.add(new Session(0, name)).orElse(null);
         Ticket ticket = new Ticket(
                 0,
@@ -40,7 +40,7 @@ public class TicketDBRepositoryTest {
         UserRepository userRepository = new UserDBRepository(new Main().loadPool());
         SessionRepository sessionRepository = new SessionDBRepository(new Main().loadPool());
         String name = String.valueOf(System.currentTimeMillis());
-        User user = userRepository.add(new User(0, name, name, name));
+        User user = userRepository.add(new User(0, name, name, name)).orElse(null);
         Session session = sessionRepository.add(new Session(0, name)).orElse(null);
         Ticket ticket = new Ticket(
                 0,
@@ -66,7 +66,7 @@ public class TicketDBRepositoryTest {
         UserRepository userRepository = new UserDBRepository(new Main().loadPool());
         SessionRepository sessionRepository = new SessionDBRepository(new Main().loadPool());
         String name = String.valueOf(System.currentTimeMillis());
-        User user = userRepository.add(new User(0, name, name, name));
+        User user = userRepository.add(new User(0, name, name, name)).orElse(null);
         Session session = sessionRepository.add(new Session(0, name)).orElse(null);
         Ticket ticket = new Ticket(
                 0,
