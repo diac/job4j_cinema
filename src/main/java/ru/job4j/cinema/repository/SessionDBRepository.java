@@ -109,11 +109,14 @@ public class SessionDBRepository implements SessionRepository {
     /**
      * Добавить новую запись в БД из объекта Session
      *
-     * @param session Объект Session из которого создается новая запись в БД
-     * @return Объект Session, соответствующий новой созданной записи в БД
+     * @param session Optional объекта Session из которого создается новая запись в БД
+     * @return <span>Optional оъекта Session, соответствующего новой созданной записи в БД.
+     * Optional.empty() в случае, если новую запись не удалось создать (напр., из-за нарушения
+     * ссылочной целостности)</span>
      */
     @Override
-    public Session add(Session session) {
+    public Optional<Session> add(Session session) {
+        Optional<Session> result = Optional.empty();
         try (
                 Connection connection = pool.getConnection();
                 PreparedStatement statement = connection.prepareStatement(
@@ -126,12 +129,13 @@ public class SessionDBRepository implements SessionRepository {
             try (ResultSet id = statement.getGeneratedKeys()) {
                 if (id.next()) {
                     session.setId(id.getInt(1));
+                    result = Optional.of(session);
                 }
             }
         } catch (SQLException e) {
             LOG.error(e.getMessage(), e);
         }
-        return session;
+        return result;
     }
 
     /**

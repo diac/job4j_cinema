@@ -11,7 +11,7 @@ public interface SessionRepository {
 
     Optional<Session> findById(int id);
 
-    Session add(Session session);
+    Optional<Session> add(Session session);
 
     boolean update(Session session);
 
