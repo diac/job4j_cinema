@@ -19,7 +19,7 @@ import java.util.Optional;
  */
 @Repository
 @ThreadSafe
-public class TicketDBRepository implements TicketRepository {
+public final class TicketDBRepository implements TicketRepository {
 
     private static final String FIND_ALL_QUERY = "SELECT * FROM ticket;";
 
