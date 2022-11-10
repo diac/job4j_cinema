@@ -140,8 +140,8 @@ public class TicketDBRepository implements TicketRepository {
             try (ResultSet id = statement.getGeneratedKeys()) {
                 if (id.next()) {
                     ticket.setId(id.getInt(1));
+                    result = Optional.of(ticket);
                 }
-                result = Optional.of(ticket);
             }
         } catch (SQLException e) {
             LOG.error(e.getMessage(), e);
