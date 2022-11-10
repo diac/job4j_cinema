@@ -111,7 +111,7 @@ public class UserDBRepository implements UserRepository {
     /**
      * Добавить новую запись в БД из объекта User
      *
-     * @param user Объект User из которого создается новая запись в БД
+     * @param user Объект User, из которого создается новая запись в БД
      * @return Объект User, соответствующий новой созданной записи в БД
      */
     @Override
