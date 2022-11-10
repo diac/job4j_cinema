@@ -1,8 +1,10 @@
 package ru.job4j.cinema.repository;
 
+import net.jcip.annotations.ThreadSafe;
 import org.apache.commons.dbcp2.BasicDataSource;
 import org.apache.log4j.LogManager;
 import org.apache.log4j.Logger;
+import org.springframework.stereotype.Repository;
 import ru.job4j.cinema.model.Session;
 
 import java.sql.Connection;
@@ -16,6 +18,8 @@ import java.util.Optional;
 /**
  * Репозиторий, отвечающий за сериализацию/десериализацию объектов модели Session в БД
  */
+@Repository
+@ThreadSafe
 public class SessionDBRepository implements SessionRepository {
 
     private static final String FIND_ALL_QUERY = "SELECT * FROM sessions;";
