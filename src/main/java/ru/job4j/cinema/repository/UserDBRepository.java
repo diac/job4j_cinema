@@ -54,6 +54,7 @@ public class UserDBRepository implements UserRepository {
 
     /**
      * Конструктор для репозитория
+     *
      * @param pool Пул подключений к БД
      */
     public UserDBRepository(BasicDataSource pool) {
@@ -62,6 +63,7 @@ public class UserDBRepository implements UserRepository {
 
     /**
      * Получить все записи для модели User из БД
+     *
      * @return Список пользователей. Пустой список, если ничего не найдено
      */
     @Override
@@ -84,6 +86,7 @@ public class UserDBRepository implements UserRepository {
 
     /**
      * Получить один объект User из БД по id
+     *
      * @param id Уникальный идентификатор объекта User
      * @return Optional для объекта User, если в БД существует запись для переданного id. Иначе -- Optional.empty()
      */
@@ -107,6 +110,7 @@ public class UserDBRepository implements UserRepository {
 
     /**
      * Добавить новую запись в БД из объекта User
+     *
      * @param user Объект User из которого создается новая запись в БД
      * @return Объект User, соответствующий новой созданной записи в БД
      */
@@ -136,6 +140,7 @@ public class UserDBRepository implements UserRepository {
 
     /**
      * Обновить в БД запсись, соответствующую передаваемому объекту User
+     *
      * @param user Объект User, для которого необходимо обновить запись в БД
      * @return true в случае успешного обновления. Иначе -- false
      */
@@ -159,6 +164,7 @@ public class UserDBRepository implements UserRepository {
 
     /**
      * Удалить из БД запись, соответствующую передаваемому объекту User
+     *
      * @param user Объект User, для которого необходимо удалить запись из БД
      * @return true в случае успешного удаления. Иначе -- false
      */
