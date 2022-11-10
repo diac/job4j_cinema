@@ -1,13 +1,11 @@
 package ru.job4j.cinema.repository;
 
-import org.junit.jupiter.api.Disabled;
 import org.junit.jupiter.api.Test;
 import ru.job4j.cinema.Main;
 import ru.job4j.cinema.model.Session;
 
-import static org.assertj.core.api.Assertions.*;
+import static org.assertj.core.api.Assertions.assertThat;
 
-@Disabled
 public class SessionDBRepositoryTest {
 
     @Test
