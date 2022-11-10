@@ -20,7 +20,7 @@ import java.util.Optional;
  */
 @Repository
 @ThreadSafe
-public class UserDBRepository implements UserRepository {
+public final class UserDBRepository implements UserRepository {
 
     private static final String FIND_ALL_QUERY = "SELECT * FROM users;";
 
