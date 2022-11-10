@@ -13,6 +13,7 @@ import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Optional;
 
 /**
  * Репозиторий, отвечающий за сериализацию/десериализацию объектов модели User в БД
@@ -84,10 +85,10 @@ public class UserDBRepository implements UserRepository {
     /**
      * Получить один объект User из БД по id
      * @param id Уникальный идентификатор объекта User
-     * @return Объект User, если таковой существует для переданного id. Иначе -- null
+     * @return Optional для объекта User, если в БД существует запись для переданного id. Иначе -- Optional.empty()
      */
     @Override
-    public User findById(int id) {
+    public Optional<User> findById(int id) {
         try (
                 Connection connection = pool.getConnection();
                 PreparedStatement statement = connection.prepareStatement(FIND_BY_ID_QUERY)
@@ -95,13 +96,13 @@ public class UserDBRepository implements UserRepository {
             statement.setInt(1, id);
             try (ResultSet resultSet = statement.executeQuery()) {
                 if (resultSet.next()) {
-                    return userFromResultSet(resultSet);
+                    return Optional.of(userFromResultSet(resultSet));
                 }
             }
         } catch (SQLException e) {
             LOG.error(e.getMessage(), e);
         }
-        return null;
+        return Optional.empty();
     }
 
     /**

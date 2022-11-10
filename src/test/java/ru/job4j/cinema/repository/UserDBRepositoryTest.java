@@ -20,7 +20,7 @@ public class UserDBRepositoryTest {
 
         );
         repository.add(user);
-        User userInDb = repository.findById(user.getId());
+        User userInDb = repository.findById(user.getId()).orElse(new User(0, null, null, null));
         assertThat(userInDb.getUsername()).isEqualTo(user.getUsername());
     }
 
@@ -40,7 +40,7 @@ public class UserDBRepositoryTest {
         user.setEmail(user.getEmail() + "_updated");
         user.setPhone(user.getPhone() + "_updated");
         repository.update(user);
-        User userInDb = repository.findById(user.getId());
+        User userInDb = repository.findById(user.getId()).orElse(new User(0, null, null, null));
         assertThat(userInDb.getUsername()).isEqualTo(user.getUsername());
         assertThat(userInDb.getEmail()).isEqualTo(user.getEmail());
         assertThat(userInDb.getPhone()).isEqualTo(user.getPhone());
@@ -60,6 +60,6 @@ public class UserDBRepositoryTest {
         repository.add(user);
         int userId = user.getId();
         repository.delete(user);
-        assertThat(repository.findById(userId)).isNull();
+        assertThat(repository.findById(userId)).isEmpty();
     }
 }
