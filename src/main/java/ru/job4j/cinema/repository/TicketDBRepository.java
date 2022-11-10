@@ -5,8 +5,15 @@ import org.apache.commons.dbcp2.BasicDataSource;
 import org.apache.log4j.LogManager;
 import org.apache.log4j.Logger;
 import org.springframework.stereotype.Repository;
+import ru.job4j.cinema.model.Session;
 import ru.job4j.cinema.model.Ticket;
+import ru.job4j.cinema.model.User;
 
+import java.sql.Connection;
+import java.sql.PreparedStatement;
+import java.sql.ResultSet;
+import java.sql.SQLException;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 
@@ -48,6 +55,10 @@ public class TicketDBRepository implements TicketRepository {
 
     private final BasicDataSource pool;
 
+    private final UserRepository userRepository;
+
+    private final SessionRepository sessionRepository;
+
     /**
      * Конструктор для репозитория
      *
@@ -55,6 +66,8 @@ public class TicketDBRepository implements TicketRepository {
      */
     public TicketDBRepository(BasicDataSource pool) {
         this.pool = pool;
+        userRepository = new UserDBRepository(pool);
+        sessionRepository = new SessionDBRepository(pool);
     }
 
     /**
@@ -64,7 +77,20 @@ public class TicketDBRepository implements TicketRepository {
      */
     @Override
     public List<Ticket> findAll() {
-        return null;
+        List<Ticket> tickets = new ArrayList<>();
+        try (
+                Connection connection = pool.getConnection();
+                PreparedStatement statement = connection.prepareStatement(FIND_ALL_QUERY)
+        ) {
+            try (ResultSet resultSet = statement.executeQuery()) {
+                while (resultSet.next()) {
+                    tickets.add(ticketFromResultSet(resultSet));
+                }
+            }
+        } catch (SQLException e) {
+            LOG.error(e.getMessage(), e);
+        }
+        return tickets;
     }
 
     /**
@@ -75,6 +101,19 @@ public class TicketDBRepository implements TicketRepository {
      */
     @Override
     public Optional<Ticket> findById(int id) {
+        try (
+                Connection connection = pool.getConnection();
+                PreparedStatement statement = connection.prepareStatement(FIND_BY_ID_QUERY)
+        ) {
+            statement.setInt(1, id);
+            try (ResultSet resultSet = statement.executeQuery()) {
+                if (resultSet.next()) {
+                    return Optional.of(ticketFromResultSet(resultSet));
+                }
+            }
+        } catch (SQLException e) {
+            LOG.error(e.getMessage(), e);
+        }
         return Optional.empty();
     }
 
@@ -86,7 +125,27 @@ public class TicketDBRepository implements TicketRepository {
      */
     @Override
     public Ticket add(Ticket ticket) {
-        return null;
+        try (
+                Connection connection = pool.getConnection();
+                PreparedStatement statement = connection.prepareStatement(
+                        ADD_QUERY,
+                        PreparedStatement.RETURN_GENERATED_KEYS
+                )
+        ) {
+            statement.setInt(1, ticket.getSession().getId());
+            statement.setInt(2, ticket.getPosRow());
+            statement.setInt(3, ticket.getCell());
+            statement.setInt(4, ticket.getUser().getId());
+            statement.execute();
+            try (ResultSet id = statement.getGeneratedKeys()) {
+                if (id.next()) {
+                    ticket.setId(id.getInt(1));
+                }
+            }
+        } catch (SQLException e) {
+            LOG.error(e.getMessage(), e);
+        }
+        return ticket;
     }
 
     /**
@@ -97,16 +156,52 @@ public class TicketDBRepository implements TicketRepository {
      */
     @Override
     public boolean update(Ticket ticket) {
-        return false;
+        boolean result = false;
+        try (
+                Connection connection = pool.getConnection();
+                PreparedStatement statement = connection.prepareStatement(UPDATE_QUERY)
+        ) {
+            statement.setInt(1, ticket.getSession().getId());
+            statement.setInt(2, ticket.getPosRow());
+            statement.setInt(3, ticket.getCell());
+            statement.setInt(4, ticket.getUser().getId());
+            statement.setInt(5, ticket.getId());
+            result = statement.executeUpdate() > 0;
+        } catch (SQLException e) {
+            LOG.error(e.getMessage(), e);
+        }
+        return result;
     }
 
     /**
      * Удалить из БД запись, соответствующую передаваемому объекту Ticket
+     *
      * @param ticket Объект Ticket, для которого необходимо удалить запись из БД
      * @return true в случае успешного удаления. Иначе -- false
      */
     @Override
     public boolean delete(Ticket ticket) {
-        return false;
+        boolean result = false;
+        try (
+                Connection connection = pool.getConnection();
+                PreparedStatement statement = connection.prepareStatement(DELETE_QUERY)
+        ) {
+            statement.setInt(1, ticket.getId());
+            result = statement.executeUpdate() > 0;
+        } catch (SQLException e) {
+            LOG.error(e.getMessage(), e);
+        }
+        return result;
+    }
+
+    private Ticket ticketFromResultSet(ResultSet resultSet) throws SQLException {
+        return new Ticket(
+                resultSet.getInt("id"),
+                sessionRepository.findById(resultSet.getInt("session_id")).orElse(new Session(0, null)),
+                resultSet.getInt("pos_row"),
+                resultSet.getInt("cell"),
+                userRepository.findById(resultSet.getInt("user_id"))
+                        .orElse(new User(0, null, null, null))
+        );
     }
 }
