@@ -11,7 +11,7 @@ public interface TicketRepository {
 
     Optional<Ticket> findById(int id);
 
-    Ticket add(Ticket ticket);
+    Optional<Ticket> add(Ticket ticket);
 
     boolean update(Ticket ticket);
 

@@ -1,6 +1,5 @@
 package ru.job4j.cinema.repository;
 
-import org.junit.jupiter.api.Disabled;
 import org.junit.jupiter.api.Test;
 import ru.job4j.cinema.Main;
 import ru.job4j.cinema.model.Session;
@@ -36,8 +35,7 @@ public class TicketDBRepositoryTest {
     }
 
     @Test
-    @Disabled
-    public void whenCreateDuplicateTicketThenThrowException() {
+    public void whenCreateDuplicateTicketThenAddResultIsEmpty() {
         TicketRepository ticketRepository = new TicketDBRepository(new Main().loadPool());
         UserRepository userRepository = new UserDBRepository(new Main().loadPool());
         SessionRepository sessionRepository = new SessionDBRepository(new Main().loadPool());
@@ -59,7 +57,7 @@ public class TicketDBRepositoryTest {
                 ticket.getCell(),
                 ticket.getUser()
         );
-        /* TODO */
+        assertThat(ticketRepository.add(duplicateTicket)).isEmpty();
     }
 
     @Test

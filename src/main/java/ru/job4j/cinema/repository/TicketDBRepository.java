@@ -9,10 +9,7 @@ import ru.job4j.cinema.model.Session;
 import ru.job4j.cinema.model.Ticket;
 import ru.job4j.cinema.model.User;
 
-import java.sql.Connection;
-import java.sql.PreparedStatement;
-import java.sql.ResultSet;
-import java.sql.SQLException;
+import java.sql.*;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
@@ -120,11 +117,14 @@ public class TicketDBRepository implements TicketRepository {
     /**
      * Добавить новую запись в БД из объекта Ticket
      *
-     * @param ticket Объект Ticket, из которого создается новая запись в БД
-     * @return Объект Ticket, соответствующий новой созданной записи в БД
+     * @param ticket Optional объекта Ticket, из которого создается новая запись в БД
+     * @return <span>Optional объекта Ticket, соответствующего новой созданной записи в БД.
+     * Optional.empty() в случае, если новую запись не удалось создать (напр., из-за нарушения
+     * ссылочной целостности)</span>
      */
     @Override
-    public Ticket add(Ticket ticket) {
+    public Optional<Ticket> add(Ticket ticket) {
+        Optional<Ticket> result = Optional.empty();
         try (
                 Connection connection = pool.getConnection();
                 PreparedStatement statement = connection.prepareStatement(
@@ -141,11 +141,12 @@ public class TicketDBRepository implements TicketRepository {
                 if (id.next()) {
                     ticket.setId(id.getInt(1));
                 }
+                result = Optional.of(ticket);
             }
         } catch (SQLException e) {
             LOG.error(e.getMessage(), e);
         }
-        return ticket;
+        return result;
     }
 
     /**
