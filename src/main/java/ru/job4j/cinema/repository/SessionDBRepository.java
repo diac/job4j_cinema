@@ -20,7 +20,7 @@ import java.util.Optional;
  */
 @Repository
 @ThreadSafe
-public class SessionDBRepository implements SessionRepository {
+public final class SessionDBRepository implements SessionRepository {
 
     private static final String FIND_ALL_QUERY = "SELECT * FROM sessions;";
 
