@@ -112,7 +112,7 @@ public final class UserDBRepository implements UserRepository {
      * Добавить новую запись в БД из объекта User
      *
      * @param user Объект User, из которого создается новая запись в БД
-     * @return Объект User, соответствующий новой созданной записи в БД
+     * @return Optional для объекта User, если удалось создать соответствующую запись в БД. Иначе -- Optional.empty()
      */
     @Override
     public Optional<User> add(User user) {
