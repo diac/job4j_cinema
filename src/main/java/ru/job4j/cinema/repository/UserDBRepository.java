@@ -48,9 +48,9 @@ public class UserDBRepository implements UserRepository {
             WHERE
                 id = ?""";
 
-    private final BasicDataSource pool;
-
     private static final Logger LOG = LogManager.getLogger(UserDBRepository.class.getName());
+
+    private final BasicDataSource pool;
 
     /**
      * Конструктор для репозитория
