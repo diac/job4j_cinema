@@ -75,4 +75,14 @@ public final class UserService {
     public boolean delete(User user) {
         return repository.delete(user);
     }
+
+    /**
+     * Найти пользователя по имени пользователя
+     *
+     * @param username Имя пользователя
+     * @return Optional объекта User. Optional.empty(), если пользователь не найден
+     */
+    public Optional<User> findByUsername(String username) {
+        return repository.findByUsername(username);
+    }
 }
