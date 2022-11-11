@@ -48,6 +48,8 @@ public final class UserDBRepository implements UserRepository {
             WHERE
                 id = ?""";
 
+    private static final String FIND_BY_USERNAME_QUERY = "SELECT * FROM users WHERE username = ?;";
+
     private static final Logger LOG = LogManager.getLogger(UserDBRepository.class.getName());
 
     private final BasicDataSource pool;
@@ -183,6 +185,30 @@ public final class UserDBRepository implements UserRepository {
             LOG.error(e.getMessage(), e);
         }
         return result;
+    }
+
+    /**
+     * Найти пользователя по имени пользователя
+     *
+     * @param username Имя пользователя
+     * @return Optional объекта User. Optional.empty(), если пользователь не найден
+     */
+    @Override
+    public Optional<User> findByUsername(String username) {
+        try (
+                Connection connection = pool.getConnection();
+                PreparedStatement statement = connection.prepareStatement(FIND_BY_USERNAME_QUERY)
+        ) {
+            statement.setString(1, username);
+            try (ResultSet resultSet = statement.executeQuery()) {
+                if (resultSet.next()) {
+                    return Optional.of(userFromResultSet(resultSet));
+                }
+            }
+        } catch (SQLException e) {
+            LOG.error(e.getMessage(), e);
+        }
+        return Optional.empty();
     }
 
     private User userFromResultSet(ResultSet resultSet) throws SQLException {
