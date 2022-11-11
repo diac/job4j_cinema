@@ -1,0 +1,31 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head th:replace="fragments/head :: htmlHead"></head>
+<body>
+<div class="container">
+    <nav th:replace="fragments/navbar :: navbarMain"></nav>
+    <h1>Выберите сеанс</h1>
+    <div>
+        <div
+                th:if="${errorMessage != null}"
+                th:text="${errorMessage}"
+                class="alert alert-danger"
+        ></div>
+        <form method="post" th:action="@{/tickets/selectRow}">
+            <div class="form-group">
+                <label for="posRow">Ряд</label>
+                <select class="form-control" id="posRow" name="posRow" required>
+                    <option th:each="row : ${#numbers.sequence(1, hall.getPlaces().size())}" th:value="${row}"
+                            th:text="${row}"></option>
+                </select>
+            </div>
+            <div class="form-group">
+            </div>
+            <div>
+                <button type="submit" class="btn btn-success">Далее</button>
+            </div>
+        </form>
+    </div>
+</div>
+</body>
+</html>

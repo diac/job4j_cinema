@@ -1,0 +1,25 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head th:replace="fragments/head :: htmlHead"></head>
+<body>
+<div class="container">
+    <nav th:replace="fragments/navbar :: navbarMain"></nav>
+    <h1>Выберите сеанс</h1>
+    <div>
+        <div>Сеанс: <span th:text="${ticket.getSession().getName()}"></span></div>
+        <div>Ряд: <span th:text="${ticket.getPosRow()}"></span></div>
+        <div>Место: <span th:text="${ticket.getCell()}"></span></div>
+        <form method="post" th:action="@{/tickets/placeOrder}">
+            <div>
+                <button type="submit" class="btn btn-success">Подтвердить</button>
+            </div>
+        </form>
+        <form method="post" th:action="@{/tickets/cancelOrder}">
+            <div>
+                <button type="submit" class="btn btn-danger">Отменить</button>
+            </div>
+        </form>
+    </div>
+</div>
+</body>
+</html>
