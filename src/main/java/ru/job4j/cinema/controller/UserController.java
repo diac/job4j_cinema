@@ -40,4 +40,10 @@ public final class UserController {
         session.setAttribute("user", userInDb.get());
         return "redirect:/";
     }
+
+    @GetMapping("/logout")
+    public String logout(HttpSession session) {
+        session.invalidate();
+        return "redirect:/login";
+    }
 }
