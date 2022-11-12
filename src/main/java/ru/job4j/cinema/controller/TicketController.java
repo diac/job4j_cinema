@@ -35,7 +35,7 @@ public final class TicketController {
     }
 
     @GetMapping("/")
-    public String selectSessionView(Model model) {
+    public String selectSessionPage(Model model) {
         List<Session> sessions = sessionService.findAll();
         model.addAttribute("sessions", sessions);
         return "tickets/selectSession";
