@@ -108,6 +108,19 @@ public final class TicketController {
         return "redirect:/";
     }
 
+    @PostMapping("/tickets/cancelOrder")
+    public String cancelOrder(HttpServletRequest req, RedirectAttributes redirectAttributes) {
+        HttpSession httpSession = req.getSession();
+        httpSession.removeAttribute("ticket.session_id");
+        httpSession.removeAttribute("ticket.pos_row");
+        httpSession.removeAttribute("ticket.cell");
+        redirectAttributes.addFlashAttribute(
+                "successMessage",
+                "Бронирование отменено"
+        );
+        return "redirect:/";
+    }
+
     private Ticket ticketFromHttpSession(HttpSession httpSession) throws IllegalArgumentException {
         int sessionId = (Integer) httpSession.getAttribute("ticket.session_id");
         Optional<Session> session = sessionService.findById(sessionId);
