@@ -14,7 +14,6 @@ import ru.job4j.cinema.model.User;
 import ru.job4j.cinema.service.HallService;
 import ru.job4j.cinema.service.SessionService;
 import ru.job4j.cinema.service.TicketService;
-import ru.job4j.cinema.service.UserService;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpSession;
@@ -26,13 +25,11 @@ import java.util.Optional;
 public final class TicketController {
 
     private final TicketService ticketService;
-    private final UserService userService;
     private final SessionService sessionService;
     private final HallService hallService;
 
-    public TicketController(TicketService ticketService, UserService userService, SessionService sessionService, HallService hallService) {
+    public TicketController(TicketService ticketService, SessionService sessionService, HallService hallService) {
         this.ticketService = ticketService;
-        this.userService = userService;
         this.sessionService = sessionService;
         this.hallService = hallService;
     }
