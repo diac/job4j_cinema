@@ -13,7 +13,7 @@ import java.util.Optional;
  */
 @Service
 @ThreadSafe
-public final class UserService {
+public class UserService {
 
     private final UserRepository repository;
 

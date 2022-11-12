@@ -13,7 +13,7 @@ import java.util.Optional;
  */
 @Service
 @ThreadSafe
-public final class SessionService {
+public class SessionService {
 
     private final SessionRepository repository;
 
