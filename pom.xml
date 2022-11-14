@@ -11,7 +11,7 @@
         <relativePath/>
     </parent>
 
-    <groupId>org.example</groupId>
+    <groupId>ru.jobj4</groupId>
     <artifactId>job4j_cinema</artifactId>
     <version>1.0-SNAPSHOT</version>
 
