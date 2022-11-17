@@ -32,7 +32,7 @@ public final class UserController {
 
     @PostMapping("/login")
     public String login(@ModelAttribute User user, HttpServletRequest req) {
-        Optional<User> userInDb = userService.findByUsername(user.getUsername());
+        Optional<User> userInDb = userService.findByUsernameAndPassword(user.getUsername(), user.getPassword());
         if (userInDb.isEmpty()) {
             return "redirect:/login?fail=true";
         }

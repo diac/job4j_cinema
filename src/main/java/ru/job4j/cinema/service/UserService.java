@@ -85,4 +85,14 @@ public class UserService {
     public Optional<User> findByUsername(String username) {
         return repository.findByUsername(username);
     }
+
+    /**
+     * Найти пользователя по имени пользователя и паролю
+     *
+     * @param username Имя пользователя
+     * @return Optional объекта User. Optional.empty(), если пользователь не найден
+     */
+    public Optional<User> findByUsernameAndPassword(String username, String password) {
+        return repository.findByUsernameAndPassword(username, password);
+    }
 }
