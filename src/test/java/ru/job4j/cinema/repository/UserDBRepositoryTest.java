@@ -15,12 +15,14 @@ public class UserDBRepositoryTest {
         User user = new User(
                 0,
                 username,
+                username,
                 username + "@test.text",
                 username
 
         );
         repository.add(user);
-        User userInDb = repository.findById(user.getId()).orElse(new User(0, null, null, null));
+        User userInDb = repository.findById(user.getId())
+                .orElse(new User(0, null, null, null, null));
         assertThat(userInDb.getUsername()).isEqualTo(user.getUsername());
     }
 
@@ -31,17 +33,21 @@ public class UserDBRepositoryTest {
         User user = new User(
                 0,
                 username,
+                username,
                 username + "@test.text",
                 username
 
         );
         repository.add(user);
         user.setUsername(user.getUsername() + "_updated");
+        user.setPassword(user.getPassword() + "_updated");
         user.setEmail(user.getEmail() + "_updated");
         user.setPhone(user.getPhone() + "_updated");
         repository.update(user);
-        User userInDb = repository.findById(user.getId()).orElse(new User(0, null, null, null));
+        User userInDb = repository.findById(user.getId())
+                .orElse(new User(0, null, null, null, null));
         assertThat(userInDb.getUsername()).isEqualTo(user.getUsername());
+        assertThat(userInDb.getPassword()).isEqualTo(user.getPassword());
         assertThat(userInDb.getEmail()).isEqualTo(user.getEmail());
         assertThat(userInDb.getPhone()).isEqualTo(user.getPhone());
     }
@@ -52,6 +58,7 @@ public class UserDBRepositoryTest {
         String username = String.valueOf(System.currentTimeMillis());
         User user = new User(
                 0,
+                username,
                 username,
                 username + "@test.text",
                 username

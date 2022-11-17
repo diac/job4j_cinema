@@ -18,4 +18,6 @@ public interface UserRepository {
     boolean delete(User user);
 
     Optional<User> findByUsername(String username);
+
+    Optional<User> findByUsernameAndPassword(String username, String password);
 }

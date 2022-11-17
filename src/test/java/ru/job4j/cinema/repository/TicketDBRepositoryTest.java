@@ -16,7 +16,7 @@ public class TicketDBRepositoryTest {
         UserRepository userRepository = new UserDBRepository(new Main().loadPool());
         SessionRepository sessionRepository = new SessionDBRepository(new Main().loadPool());
         String name = String.valueOf(System.currentTimeMillis());
-        User user = userRepository.add(new User(0, name, name, name)).orElse(null);
+        User user = userRepository.add(new User(0, name, name, name, name)).orElse(null);
         Session session = sessionRepository.add(new Session(0, name)).orElse(null);
         Ticket ticket = new Ticket(
                 0,
@@ -40,7 +40,7 @@ public class TicketDBRepositoryTest {
         UserRepository userRepository = new UserDBRepository(new Main().loadPool());
         SessionRepository sessionRepository = new SessionDBRepository(new Main().loadPool());
         String name = String.valueOf(System.currentTimeMillis());
-        User user = userRepository.add(new User(0, name, name, name)).orElse(null);
+        User user = userRepository.add(new User(0, name, name, name, name)).orElse(null);
         Session session = sessionRepository.add(new Session(0, name)).orElse(null);
         Ticket ticket = new Ticket(
                 0,
@@ -66,7 +66,7 @@ public class TicketDBRepositoryTest {
         UserRepository userRepository = new UserDBRepository(new Main().loadPool());
         SessionRepository sessionRepository = new SessionDBRepository(new Main().loadPool());
         String name = String.valueOf(System.currentTimeMillis());
-        User user = userRepository.add(new User(0, name, name, name)).orElse(null);
+        User user = userRepository.add(new User(0, name, name, name, name)).orElse(null);
         Session session = sessionRepository.add(new Session(0, name)).orElse(null);
         Ticket ticket = new Ticket(
                 0,
@@ -90,12 +90,17 @@ public class TicketDBRepositoryTest {
     @Test
     public void whenDeleteTicket() {
         TicketRepository ticketRepository = new TicketDBRepository(new Main().loadPool());
+        SessionRepository sessionRepository = new SessionDBRepository(new Main().loadPool());
+        UserRepository userRepository = new UserDBRepository(new Main().loadPool());
+        String name = String.valueOf(System.currentTimeMillis());
+        Session session = sessionRepository.add(new Session(0, name)).orElse(null);
+        User user = userRepository.add(new User(0, name, name, name, name)).orElse(null);
         Ticket ticket = new Ticket(
                 0,
-                new Session(),
-                1,
-                1,
-                new User()
+                session,
+                0,
+                0,
+                user
         );
         ticketRepository.add(ticket);
         int ticketId = ticket.getId();

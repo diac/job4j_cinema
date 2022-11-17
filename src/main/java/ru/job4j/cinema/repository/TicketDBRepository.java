@@ -202,7 +202,7 @@ public final class TicketDBRepository implements TicketRepository {
                 resultSet.getInt("pos_row"),
                 resultSet.getInt("cell"),
                 userRepository.findById(resultSet.getInt("user_id"))
-                        .orElse(new User(0, null, null, null))
+                        .orElse(new User(0, null, null, null, null))
         );
     }
 }

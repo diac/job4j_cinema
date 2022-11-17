@@ -28,15 +28,16 @@ public final class UserDBRepository implements UserRepository {
 
     private static final String ADD_QUERY = """
             INSERT INTO
-                users(username, email, phone)
+                users(username, password, email, phone)
             VALUES
-                (?, ?, ?);""";
+                (?, ?, ?, ?);""";
 
     private static final String UPDATE_QUERY = """
             UPDATE
                 users
             SET
                 username = ?,
+                password = ?,
                 email = ?,
                 phone = ?
             WHERE
@@ -49,6 +50,9 @@ public final class UserDBRepository implements UserRepository {
                 id = ?""";
 
     private static final String FIND_BY_USERNAME_QUERY = "SELECT * FROM users WHERE username = ?;";
+
+    private static final String FIND_BY_USERNAME_AND_PASSWORD_QUERY =
+            "SELECT * FROM users WHERE username = ? AND password = ?;";
 
     private static final Logger LOG = LogManager.getLogger(UserDBRepository.class.getName());
 
@@ -127,8 +131,9 @@ public final class UserDBRepository implements UserRepository {
                 )
         ) {
             statement.setString(1, user.getUsername());
-            statement.setString(2, user.getEmail());
-            statement.setString(3, user.getPhone());
+            statement.setString(2, user.getPassword());
+            statement.setString(3, user.getEmail());
+            statement.setString(4, user.getPhone());
             statement.execute();
             try (ResultSet id = statement.getGeneratedKeys()) {
                 if (id.next()) {
@@ -156,9 +161,10 @@ public final class UserDBRepository implements UserRepository {
                 PreparedStatement statement = connection.prepareStatement(UPDATE_QUERY)
         ) {
             statement.setString(1, user.getUsername());
-            statement.setString(2, user.getEmail());
-            statement.setString(3, user.getPhone());
-            statement.setInt(4, user.getId());
+            statement.setString(2, user.getPassword());
+            statement.setString(3, user.getEmail());
+            statement.setString(4, user.getPhone());
+            statement.setInt(5, user.getId());
             result = statement.executeUpdate() > 0;
         } catch (SQLException e) {
             LOG.error(e.getMessage(), e);
@@ -211,10 +217,37 @@ public final class UserDBRepository implements UserRepository {
         return Optional.empty();
     }
 
+    /**
+     * Найти пользователя по имени пользователя и паролю
+     *
+     * @param username Имя пользователя
+     * @param password Пароль пользователя
+     * @return Optional объекта User. Optional.empty(), если пользователь не найден
+     */
+    @Override
+    public Optional<User> findByUsernameAndPassword(String username, String password) {
+        try (
+                Connection connection = pool.getConnection();
+                PreparedStatement statement = connection.prepareStatement(FIND_BY_USERNAME_AND_PASSWORD_QUERY)
+        ) {
+            statement.setString(1, username);
+            statement.setString(2, password);
+            try (ResultSet resultSet = statement.executeQuery()) {
+                if (resultSet.next()) {
+                    return Optional.of(userFromResultSet(resultSet));
+                }
+            }
+        } catch (SQLException e) {
+            LOG.error(e.getMessage(), e);
+        }
+        return Optional.empty();
+    }
+
     private User userFromResultSet(ResultSet resultSet) throws SQLException {
         return new User(
                 resultSet.getInt("id"),
                 resultSet.getString("username"),
+                resultSet.getString("password"),
                 resultSet.getString("email"),
                 resultSet.getString("phone")
         );
