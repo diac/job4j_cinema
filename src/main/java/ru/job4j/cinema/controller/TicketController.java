@@ -44,37 +44,33 @@ public final class TicketController {
     @PostMapping("/")
     public String selectSession(@ModelAttribute Ticket ticket, HttpServletRequest req) {
         HttpSession httpSession = req.getSession();
-        httpSession.setAttribute("ticket.session_id", ticket.getSession().getId());
-        return "redirect:/tickets/selectRow";
-    }
-
-    @GetMapping("/tickets/selectRow")
-    public String selectRowPage(Model model) {
-        Hall hall = hallService.getHall();
-        model.addAttribute("hall", hall);
-        return "tickets/selectRow";
-    }
-
-    @PostMapping("/tickets/selectRow")
-    public String selectRow(@ModelAttribute Ticket ticket, HttpServletRequest req) {
-        HttpSession httpSession = req.getSession();
-        httpSession.setAttribute("ticket.pos_row", ticket.getPosRow());
+        httpSession.setAttribute(
+                "ticket",
+                new Ticket(
+                        0,
+                        new Session(ticket.getSession().getId(), null),
+                        0,
+                        0,
+                        null
+                )
+        );
         return "redirect:/tickets/selectPlace";
     }
 
     @GetMapping("/tickets/selectPlace")
     public String selectPlacePage(Model model, HttpServletRequest req) {
         HttpSession httpSession = req.getSession();
+        Ticket ticket = (Ticket) httpSession.getAttribute("ticket");
         Hall hall = hallService.getHall();
+        model.addAttribute("ticket", ticket);
         model.addAttribute("hall", hall);
-        model.addAttribute("posRow", httpSession.getAttribute("ticket.pos_row"));
         return "tickets/selectPlace";
     }
 
     @PostMapping("/tickets/selectPlace")
     public String selectPlace(@ModelAttribute Ticket ticket, HttpServletRequest req) {
         HttpSession httpSession = req.getSession();
-        httpSession.setAttribute("ticket.cell", ticket.getCell());
+        httpSession.setAttribute("ticket", ticket);
         return "redirect:/tickets/review";
     }
 
@@ -99,7 +95,7 @@ public final class TicketController {
                         "errorMessage",
                         "Не удалось забронировать билет. Попробуйте выбрать другой ряд и место."
                 );
-                return "redirect:/tickets/selectRow";
+                return "redirect:/tickets/selectPlace";
             }
             redirectAttributes.addFlashAttribute("successMessage", "Место забронировано");
         }  catch (IllegalArgumentException e) {
@@ -111,9 +107,7 @@ public final class TicketController {
     @PostMapping("/tickets/cancelOrder")
     public String cancelOrder(HttpServletRequest req, RedirectAttributes redirectAttributes) {
         HttpSession httpSession = req.getSession();
-        httpSession.removeAttribute("ticket.session_id");
-        httpSession.removeAttribute("ticket.pos_row");
-        httpSession.removeAttribute("ticket.cell");
+        httpSession.removeAttribute("ticket");
         redirectAttributes.addFlashAttribute(
                 "successMessage",
                 "Бронирование отменено"
@@ -122,16 +116,21 @@ public final class TicketController {
     }
 
     private Ticket ticketFromHttpSession(HttpSession httpSession) throws IllegalArgumentException {
-        int sessionId = (Integer) httpSession.getAttribute("ticket.session_id");
-        Optional<Session> session = sessionService.findById(sessionId);
+        Ticket sessionTicket = (Ticket) httpSession.getAttribute("ticket");
+        Optional<Session> session = Optional.ofNullable(sessionTicket.getSession());
+        int sessionId = 0;
+        if (session.isPresent()) {
+            sessionId = session.get().getId();
+            session = sessionService.findById(sessionId);
+        }
         if (session.isEmpty()) {
             throw (new IllegalArgumentException(String.format("Сеанс #%d не существует", sessionId)));
         }
         return new Ticket(
                 0,
                 session.get(),
-                (Integer) httpSession.getAttribute("ticket.pos_row"),
-                (Integer) httpSession.getAttribute("ticket.cell"),
+                sessionTicket.getPosRow(),
+                sessionTicket.getCell(),
                 ((User) httpSession.getAttribute("user"))
         );
     }

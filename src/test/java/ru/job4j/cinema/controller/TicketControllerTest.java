@@ -50,37 +50,8 @@ public class TicketControllerTest {
         TicketController ticketController = new TicketController(ticketService, sessionService, hallService);
         String redirect = ticketController.selectSession(ticket, request);
         assertThat(
-                request.getSession().getAttribute("ticket.session_id")
-        ).isEqualTo(ticket.getSession().getId());
-        assertThat(redirect).isEqualTo("redirect:/tickets/selectRow");
-    }
-
-    @Test
-    public void whenSelectRowPage() {
-        SessionService sessionService = mock(SessionService.class);
-        TicketService ticketService = mock(TicketService.class);
-        HallService hallService = mock(HallService.class);
-        TicketController ticketController = new TicketController(ticketService, sessionService, hallService);
-        Hall hall = new Hall(List.of(1, 2, 3));
-        when(hallService.getHall()).thenReturn(hall);
-        Model model = mock(Model.class);
-        String page = ticketController.selectRowPage(model);
-        verify(model).addAttribute("hall", hall);
-        assertThat(page).isEqualTo("tickets/selectRow");
-    }
-
-    @Test
-    public void whenSelectRow() {
-        SessionService sessionService = mock(SessionService.class);
-        TicketService ticketService = mock(TicketService.class);
-        HallService hallService = mock(HallService.class);
-        HttpServletRequest request = new MockHttpServletRequest();
-        Ticket ticket = new Ticket(0, new Session(), 0, 0, new User());
-        TicketController ticketController = new TicketController(ticketService, sessionService, hallService);
-        String redirect = ticketController.selectRow(ticket, request);
-        assertThat(
-                request.getSession().getAttribute("ticket.pos_row")
-        ).isEqualTo(ticket.getPosRow());
+                request.getSession().getAttribute("ticket")
+        ).isEqualTo(ticket);
         assertThat(redirect).isEqualTo("redirect:/tickets/selectPlace");
     }
 
@@ -90,13 +61,16 @@ public class TicketControllerTest {
         TicketService ticketService = mock(TicketService.class);
         HallService hallService = mock(HallService.class);
         HttpServletRequest request = new MockHttpServletRequest();
+        HttpSession httpSession = request.getSession();
+        Ticket ticket = new Ticket(0, null, 0, 0, null);
+        httpSession.setAttribute("ticket", ticket);
         TicketController ticketController = new TicketController(ticketService, sessionService, hallService);
         Hall hall = new Hall(List.of(1, 2, 3));
         when(hallService.getHall()).thenReturn(hall);
         Model model = mock(Model.class);
         String page = ticketController.selectPlacePage(model, request);
+        verify(model).addAttribute("ticket", ticket);
         verify(model).addAttribute("hall", hall);
-        verify(model).addAttribute("posRow", request.getSession().getAttribute("ticket.pos_row"));
         assertThat(page).isEqualTo("tickets/selectPlace");
     }
 
@@ -107,11 +81,11 @@ public class TicketControllerTest {
         HallService hallService = mock(HallService.class);
         HttpServletRequest request = new MockHttpServletRequest();
         Ticket ticket = new Ticket(0, new Session(), 0, 0, new User());
+        HttpSession httpSession = request.getSession();
+        httpSession.setAttribute("ticket", ticket);
         TicketController ticketController = new TicketController(ticketService, sessionService, hallService);
         String redirect = ticketController.selectPlace(ticket, request);
-        assertThat(
-                request.getSession().getAttribute("ticket.cell")
-        ).isEqualTo(ticket.getCell());
+        assertThat(httpSession.getAttribute("ticket")).isEqualTo(ticket);
         assertThat(redirect).isEqualTo("redirect:/tickets/review");
     }
 
@@ -124,11 +98,9 @@ public class TicketControllerTest {
         RedirectAttributes redirectAttributes = mock(RedirectAttributes.class);
         Session session = new Session(0, "Test session");
         when(sessionService.findById(0)).thenReturn(Optional.of(session));
-        Ticket ticket = new Ticket(0, new Session(), 0, 0, new User());
+        Ticket ticket = new Ticket(0, session, 0, 0, new User());
         HttpSession httpSession = request.getSession();
-        httpSession.setAttribute("ticket.session_id", ticket.getSession().getId());
-        httpSession.setAttribute("ticket.pos_row", ticket.getPosRow());
-        httpSession.setAttribute("ticket.cell", ticket.getCell());
+        httpSession.setAttribute("ticket", ticket);
         httpSession.setAttribute("user", new User());
         Model model = mock(Model.class);
         TicketController ticketController = new TicketController(ticketService, sessionService, hallService);
@@ -146,9 +118,7 @@ public class TicketControllerTest {
         RedirectAttributes redirectAttributes = mock(RedirectAttributes.class);
         Ticket ticket = new Ticket(0, new Session(), 0, 0, new User());
         HttpSession httpSession = request.getSession();
-        httpSession.setAttribute("ticket.session_id", ticket.getSession().getId());
-        httpSession.setAttribute("ticket.pos_row", ticket.getPosRow());
-        httpSession.setAttribute("ticket.cell", ticket.getCell());
+        httpSession.setAttribute("ticket", ticket);
         httpSession.setAttribute("user", new User());
         Model model = mock(Model.class);
         TicketController ticketController = new TicketController(ticketService, sessionService, hallService);
@@ -164,14 +134,12 @@ public class TicketControllerTest {
         HttpServletRequest request = new MockHttpServletRequest();
         HttpSession httpSession = request.getSession();
         RedirectAttributes redirectAttributes = mock(RedirectAttributes.class);
-        Ticket ticket = new Ticket(0, new Session(), 0, 0, new User());
-        httpSession.setAttribute("ticket.session_id", ticket.getSession().getId());
-        httpSession.setAttribute("ticket.pos_row", ticket.getPosRow());
-        httpSession.setAttribute("ticket.cell", ticket.getCell());
-        httpSession.setAttribute("user", new User());
-        when(ticketService.add(ticket)).thenReturn(Optional.of(ticket));
         Session session = new Session(0, "Test session");
         when(sessionService.findById(0)).thenReturn(Optional.of(session));
+        Ticket ticket = new Ticket(0, session, 0, 0, new User());
+        httpSession.setAttribute("ticket", ticket);
+        httpSession.setAttribute("user", new User());
+        when(ticketService.add(ticket)).thenReturn(Optional.of(ticket));
         TicketController ticketController = new TicketController(ticketService, sessionService, hallService);
         String redirect = ticketController.placeOrder(request, redirectAttributes);
         assertThat(redirect).isEqualTo("redirect:/");
@@ -185,17 +153,15 @@ public class TicketControllerTest {
         HttpServletRequest request = new MockHttpServletRequest();
         HttpSession httpSession = request.getSession();
         RedirectAttributes redirectAttributes = mock(RedirectAttributes.class);
-        Ticket ticket = new Ticket(0, new Session(), 0, 0, new User());
-        httpSession.setAttribute("ticket.session_id", ticket.getSession().getId());
-        httpSession.setAttribute("ticket.pos_row", ticket.getPosRow());
-        httpSession.setAttribute("ticket.cell", ticket.getCell());
-        httpSession.setAttribute("user", new User());
-        when(ticketService.add(ticket)).thenReturn(Optional.empty());
         Session session = new Session(0, "Test session");
         when(sessionService.findById(0)).thenReturn(Optional.of(session));
+        Ticket ticket = new Ticket(0, session, 0, 0, new User());
+        httpSession.setAttribute("ticket", ticket);
+        httpSession.setAttribute("user", new User());
+        when(ticketService.add(ticket)).thenReturn(Optional.empty());
         TicketController ticketController = new TicketController(ticketService, sessionService, hallService);
         String redirect = ticketController.placeOrder(request, redirectAttributes);
-        assertThat(redirect).isEqualTo("redirect:/tickets/selectRow");
+        assertThat(redirect).isEqualTo("redirect:/tickets/selectPlace");
     }
 
     @Test
@@ -206,16 +172,12 @@ public class TicketControllerTest {
         HttpServletRequest request = new MockHttpServletRequest();
         HttpSession httpSession = request.getSession();
         Ticket ticket = new Ticket(0, new Session(), 0, 0, new User());
-        httpSession.setAttribute("ticket.session_id", ticket.getSession().getId());
-        httpSession.setAttribute("ticket.pos_row", ticket.getPosRow());
-        httpSession.setAttribute("ticket.cell", ticket.getCell());
+        httpSession.setAttribute("ticket", ticket);
         httpSession.setAttribute("user", new User());
         RedirectAttributes redirectAttributes = mock(RedirectAttributes.class);
         TicketController ticketController = new TicketController(ticketService, sessionService, hallService);
         String redirect = ticketController.cancelOrder(request, redirectAttributes);
-        assertThat(httpSession.getAttribute("ticket.session_id")).isNull();
-        assertThat(httpSession.getAttribute("ticket.pos_row")).isNull();
-        assertThat(httpSession.getAttribute("ticket.cell")).isNull();
+        assertThat(httpSession.getAttribute("ticket")).isNull();
         assertThat(redirect).isEqualTo("redirect:/");
     }
 }

@@ -12,7 +12,8 @@ import java.util.Set;
 public class AuthFilter implements Filter {
 
     private static final Set<String> ALLOWED_MAPPINGS = Set.of(
-            "login"
+            "login",
+            "/css/custom.css"
     );
 
     @Override

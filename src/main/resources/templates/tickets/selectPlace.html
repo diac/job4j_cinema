@@ -2,24 +2,36 @@
 <html lang="en" xmlns:th="http://www.thymeleaf.org">
 <head th:replace="fragments/head :: htmlHead"></head>
 <body>
-<div class="container">
+<div class="container tickets-select-place">
     <nav th:replace="fragments/navbar :: navbarMain"></nav>
-    <h1>Выберите сеанс</h1>
-    <div>
-        <form method="post" th:action="@{/tickets/selectPlace}">
-            <div class="form-group">
-                <label for="cell">Место</label>
-                <select class="form-control" id="cell" name="cell" required>
-                    <option th:each="cell : ${#numbers.sequence(1, hall.getPlaces().get(posRow))}" th:value="${cell}"
-                            th:text="${cell}"></option>
-                </select>
+    <div
+            th:if="${errorMessage != null}"
+            th:text="${errorMessage}"
+            class="alert alert-danger"
+    ></div>
+    <h1>Выберите место</h1>
+    <div class="hall-view">
+        <div
+                th:each="row : ${#numbers.sequence(1, hall.getPlaces().size())}"
+                class="hall-row"
+        >
+            <div class="row-header">Ряд <span th:text="${row}"></span></div>
+            <div class="hall-row-places-wrapper">
+                <div class="hall-row-places">
+                    <div
+                            th:each="place : ${#numbers.sequence(1, hall.getPlaces().get(row - 1))}"
+                            class="place"
+                    >
+                        <form method="post" th:action="@{/tickets/selectPlace}">
+                            <input type="hidden" name="session.id" th:value="${ticket.getSession.getId()}">
+                            <input type="hidden" name="posRow" th:value="${row}">
+                            <input type="hidden" name="cell" th:value="${place}">
+                            <button type="submit" th:text="${place}"></button>
+                        </form>
+                    </div>
+                </div>
             </div>
-            <div class="form-group">
-            </div>
-            <div>
-                <button type="submit" class="btn btn-success">Забронировать</button>
-            </div>
-        </form>
+        </div>
     </div>
 </div>
 </body>
