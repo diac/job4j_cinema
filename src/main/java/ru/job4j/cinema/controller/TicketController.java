@@ -17,8 +17,7 @@ import ru.job4j.cinema.service.TicketService;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpSession;
-import java.util.List;
-import java.util.Optional;
+import java.util.*;
 
 @Controller
 @ThreadSafe
@@ -64,6 +63,7 @@ public final class TicketController {
         Hall hall = hallService.getHall();
         model.addAttribute("ticket", ticket);
         model.addAttribute("hall", hall);
+        model.addAttribute("placesHelper", new PlacesHelper(ticket.getSession()));
         return "tickets/selectPlace";
     }
 
@@ -98,7 +98,7 @@ public final class TicketController {
                 return "redirect:/tickets/selectPlace";
             }
             redirectAttributes.addFlashAttribute("successMessage", "Место забронировано");
-        }  catch (IllegalArgumentException e) {
+        } catch (IllegalArgumentException e) {
             redirectAttributes.addFlashAttribute("errorMessage", e.getMessage());
         }
         return "redirect:/";
@@ -133,5 +133,27 @@ public final class TicketController {
                 sessionTicket.getCell(),
                 ((User) httpSession.getAttribute("user"))
         );
+    }
+
+    private record Place(int row, int place) {
+    }
+
+    private class PlacesHelper {
+
+        private final Set<Place> occupiedPlaces = new HashSet();
+
+        public PlacesHelper(Session session) {
+            if (session == null) {
+                throw new IllegalArgumentException("Сеанс не может быть null");
+            }
+            List<Ticket> tickets = ticketService.findAllBySessionId(session.getId());
+            tickets.forEach(
+                    ticket -> occupiedPlaces.add(new Place(ticket.getPosRow(), ticket.getCell()))
+            );
+        }
+
+        public boolean placeIsAvailable(int row, int place) {
+            return !occupiedPlaces.contains(new Place(row, place));
+        }
     }
 }

@@ -22,12 +22,23 @@
                             th:each="place : ${#numbers.sequence(1, hall.getPlaces().get(row - 1))}"
                             class="place"
                     >
-                        <form method="post" th:action="@{/tickets/selectPlace}">
+                        <form
+                                th:if="${placesHelper.placeIsAvailable(row, place)}"
+                                method="post"
+                                th:action="@{/tickets/selectPlace}"
+                        >
                             <input type="hidden" name="session.id" th:value="${ticket.getSession.getId()}">
                             <input type="hidden" name="posRow" th:value="${row}">
                             <input type="hidden" name="cell" th:value="${place}">
-                            <button type="submit" th:text="${place}"></button>
+                            <button type="submit" th:text="${place}" th:title="'Ряд ' + ${row} + ', место ' + ${place}"></button>
                         </form>
+
+                        <div
+                                th:if="${!placesHelper.placeIsAvailable(row, place)}"
+                                class="place-unavailable"
+                        >
+                            <button type="button" disabled th:text="${place}" title="Место занято"></button>
+                        </div>
                     </div>
                 </div>
             </div>

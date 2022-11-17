@@ -67,6 +67,16 @@ public class TicketService {
     }
 
     /**
+     * Получить все объекты для модели Ticket из репозитория для конкретного сеанса
+     *
+     * @param sessionId ID сеанса
+     * @return Список билетов. Пустой список, если ничего не найдено
+     */
+    public List<Ticket> findAllBySessionId(int sessionId) {
+        return repository.findAllBySessionId(sessionId);
+    }
+
+    /**
      * Удалить из репозитория объект, соответствующий передаваемому объекту Ticket
      *
      * @param ticket Объект Ticket, который необходимо удалить из репозитория

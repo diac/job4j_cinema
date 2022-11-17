@@ -48,6 +48,14 @@ public final class TicketDBRepository implements TicketRepository {
             WHERE
                 id = ?;""";
 
+    private static final String FIND_ALL_BY_SESSION_ID_QUERY = """
+            SELECT
+                *
+            FROM
+                ticket
+            WHERE
+                session_id = ?;""";
+
     private static final Logger LOG = LogManager.getLogger(TicketRepository.class.getName());
 
     private final BasicDataSource pool;
@@ -193,6 +201,31 @@ public final class TicketDBRepository implements TicketRepository {
             LOG.error(e.getMessage(), e);
         }
         return result;
+    }
+
+    /**
+     * Получить все записи для модели Ticket из БД для конкретного сеанса
+     *
+     * @param sessionId ID сеанса
+     * @return Список билетов. Пустой список, если ничего не найдено
+     */
+    @Override
+    public List<Ticket> findAllBySessionId(int sessionId) {
+        List<Ticket> tickets = new ArrayList<>();
+        try (
+                Connection connection = pool.getConnection();
+                PreparedStatement statement = connection.prepareStatement(FIND_ALL_BY_SESSION_ID_QUERY)
+        ) {
+            statement.setInt(1, sessionId);
+            try (ResultSet resultSet = statement.executeQuery()) {
+                while (resultSet.next()) {
+                    tickets.add(ticketFromResultSet(resultSet));
+                }
+            }
+        } catch (SQLException e) {
+            LOG.error(e.getMessage(), e);
+        }
+        return tickets;
     }
 
     private Ticket ticketFromResultSet(ResultSet resultSet) throws SQLException {

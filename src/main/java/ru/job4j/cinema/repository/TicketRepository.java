@@ -16,4 +16,6 @@ public interface TicketRepository {
     boolean update(Ticket ticket);
 
     boolean delete(Ticket ticket);
+
+    List<Ticket> findAllBySessionId(int sessionId);
 }
