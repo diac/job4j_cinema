@@ -62,7 +62,7 @@ public class TicketControllerTest {
         HallService hallService = mock(HallService.class);
         HttpServletRequest request = new MockHttpServletRequest();
         HttpSession httpSession = request.getSession();
-        Ticket ticket = new Ticket(0, null, 0, 0, null);
+        Ticket ticket = new Ticket(0, new Session(0, "Test session"), 0, 0, null);
         httpSession.setAttribute("ticket", ticket);
         TicketController ticketController = new TicketController(ticketService, sessionService, hallService);
         Hall hall = new Hall(List.of(1, 2, 3));
