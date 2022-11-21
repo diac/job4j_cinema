@@ -1,16 +1,21 @@
 package ru.job4j.cinema.repository;
 
 import org.junit.jupiter.api.Test;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.boot.test.context.SpringBootTest;
 import ru.job4j.cinema.Main;
 import ru.job4j.cinema.model.Session;
 
 import static org.assertj.core.api.Assertions.assertThat;
 
+@SpringBootTest(classes = Main.class)
 public class SessionDBRepositoryTest {
+
+    @Autowired
+    private SessionRepository repository;
 
     @Test
     public void whenCreateSession() {
-        SessionRepository repository = new SessionDBRepository(new Main().loadPool());
         String sessionName = String.valueOf(System.currentTimeMillis());
         Session session = new Session(0, sessionName);
         repository.add(session);
@@ -20,7 +25,6 @@ public class SessionDBRepositoryTest {
 
     @Test
     public void whenUpdateSession() {
-        SessionRepository repository = new SessionDBRepository(new Main().loadPool());
         String sessionName = String.valueOf(System.currentTimeMillis());
         Session session = new Session(0, sessionName);
         repository.add(session);
@@ -32,7 +36,6 @@ public class SessionDBRepositoryTest {
 
     @Test
     public void whenDeleteSession() {
-        SessionRepository repository = new SessionDBRepository(new Main().loadPool());
         String sessionName = String.valueOf(System.currentTimeMillis());
         Session session = new Session(0, sessionName);
         repository.add(session);

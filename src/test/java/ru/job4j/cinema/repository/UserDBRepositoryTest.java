@@ -1,16 +1,21 @@
 package ru.job4j.cinema.repository;
 
 import org.junit.jupiter.api.Test;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.boot.test.context.SpringBootTest;
 import ru.job4j.cinema.Main;
 import ru.job4j.cinema.model.User;
 
 import static org.assertj.core.api.Assertions.assertThat;
 
+@SpringBootTest(classes = Main.class)
 public class UserDBRepositoryTest {
+
+    @Autowired
+    private UserRepository repository;
 
     @Test
     public void whenCreateUser() {
-        UserRepository repository = new UserDBRepository(new Main().loadPool());
         String username = String.valueOf(System.currentTimeMillis());
         User user = new User(
                 0,
@@ -28,7 +33,6 @@ public class UserDBRepositoryTest {
 
     @Test
     public void whenUpdateUser() {
-        UserRepository repository = new UserDBRepository(new Main().loadPool());
         String username = String.valueOf(System.currentTimeMillis());
         User user = new User(
                 0,
@@ -54,7 +58,6 @@ public class UserDBRepositoryTest {
 
     @Test
     public void whenDeleteUser() {
-        UserRepository repository = new UserDBRepository(new Main().loadPool());
         String username = String.valueOf(System.currentTimeMillis());
         User user = new User(
                 0,

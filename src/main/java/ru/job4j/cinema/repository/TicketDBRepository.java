@@ -1,15 +1,19 @@
 package ru.job4j.cinema.repository;
 
 import net.jcip.annotations.ThreadSafe;
-import org.apache.commons.dbcp2.BasicDataSource;
 import org.apache.log4j.LogManager;
 import org.apache.log4j.Logger;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Repository;
 import ru.job4j.cinema.model.Session;
 import ru.job4j.cinema.model.Ticket;
 import ru.job4j.cinema.model.User;
 
-import java.sql.*;
+import javax.sql.DataSource;
+import java.sql.Connection;
+import java.sql.PreparedStatement;
+import java.sql.ResultSet;
+import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
@@ -58,22 +62,14 @@ public final class TicketDBRepository implements TicketRepository {
 
     private static final Logger LOG = LogManager.getLogger(TicketRepository.class.getName());
 
-    private final BasicDataSource pool;
+    @Autowired
+    private DataSource dataSource;
 
-    private final UserRepository userRepository;
+    @Autowired
+    private UserRepository userRepository;
 
-    private final SessionRepository sessionRepository;
-
-    /**
-     * Конструктор для репозитория
-     *
-     * @param pool Пул подключений к БД
-     */
-    public TicketDBRepository(BasicDataSource pool) {
-        this.pool = pool;
-        userRepository = new UserDBRepository(pool);
-        sessionRepository = new SessionDBRepository(pool);
-    }
+    @Autowired
+    private SessionRepository sessionRepository;
 
     /**
      * Получить все записи для модели Ticket из БД
@@ -84,7 +80,7 @@ public final class TicketDBRepository implements TicketRepository {
     public List<Ticket> findAll() {
         List<Ticket> tickets = new ArrayList<>();
         try (
-                Connection connection = pool.getConnection();
+                Connection connection = dataSource.getConnection();
                 PreparedStatement statement = connection.prepareStatement(FIND_ALL_QUERY)
         ) {
             try (ResultSet resultSet = statement.executeQuery()) {
@@ -107,7 +103,7 @@ public final class TicketDBRepository implements TicketRepository {
     @Override
     public Optional<Ticket> findById(int id) {
         try (
-                Connection connection = pool.getConnection();
+                Connection connection = dataSource.getConnection();
                 PreparedStatement statement = connection.prepareStatement(FIND_BY_ID_QUERY)
         ) {
             statement.setInt(1, id);
@@ -134,7 +130,7 @@ public final class TicketDBRepository implements TicketRepository {
     public Optional<Ticket> add(Ticket ticket) {
         Optional<Ticket> result = Optional.empty();
         try (
-                Connection connection = pool.getConnection();
+                Connection connection = dataSource.getConnection();
                 PreparedStatement statement = connection.prepareStatement(
                         ADD_QUERY,
                         PreparedStatement.RETURN_GENERATED_KEYS
@@ -167,7 +163,7 @@ public final class TicketDBRepository implements TicketRepository {
     public boolean update(Ticket ticket) {
         boolean result = false;
         try (
-                Connection connection = pool.getConnection();
+                Connection connection = dataSource.getConnection();
                 PreparedStatement statement = connection.prepareStatement(UPDATE_QUERY)
         ) {
             statement.setInt(1, ticket.getSession().getId());
@@ -192,7 +188,7 @@ public final class TicketDBRepository implements TicketRepository {
     public boolean delete(Ticket ticket) {
         boolean result = false;
         try (
-                Connection connection = pool.getConnection();
+                Connection connection = dataSource.getConnection();
                 PreparedStatement statement = connection.prepareStatement(DELETE_QUERY)
         ) {
             statement.setInt(1, ticket.getId());
@@ -213,7 +209,7 @@ public final class TicketDBRepository implements TicketRepository {
     public List<Ticket> findAllBySessionId(int sessionId) {
         List<Ticket> tickets = new ArrayList<>();
         try (
-                Connection connection = pool.getConnection();
+                Connection connection = dataSource.getConnection();
                 PreparedStatement statement = connection.prepareStatement(FIND_ALL_BY_SESSION_ID_QUERY)
         ) {
             statement.setInt(1, sessionId);

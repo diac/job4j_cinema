@@ -1,12 +1,13 @@
 package ru.job4j.cinema.repository;
 
 import net.jcip.annotations.ThreadSafe;
-import org.apache.commons.dbcp2.BasicDataSource;
 import org.apache.log4j.LogManager;
 import org.apache.log4j.Logger;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Repository;
 import ru.job4j.cinema.model.Session;
 
+import javax.sql.DataSource;
 import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
@@ -48,16 +49,8 @@ public final class SessionDBRepository implements SessionRepository {
 
     private static final Logger LOG = LogManager.getLogger(SessionRepository.class.getName());
 
-    private final BasicDataSource pool;
-
-    /**
-     * Конструктор для репозитория
-     *
-     * @param pool Пул подключений к БД
-     */
-    public SessionDBRepository(BasicDataSource pool) {
-        this.pool = pool;
-    }
+    @Autowired
+    private DataSource dataSource;
 
     /**
      * Получить все записи для модели Session из БД
@@ -68,7 +61,7 @@ public final class SessionDBRepository implements SessionRepository {
     public List<Session> findAll() {
         List<Session> sessions = new ArrayList<>();
         try (
-                Connection connection = pool.getConnection();
+                Connection connection = dataSource.getConnection();
                 PreparedStatement statement = connection.prepareStatement(FIND_ALL_QUERY)
         ) {
             try (ResultSet resultSet = statement.executeQuery()) {
@@ -91,7 +84,7 @@ public final class SessionDBRepository implements SessionRepository {
     @Override
     public Optional<Session> findById(int id) {
         try (
-                Connection connection = pool.getConnection();
+                Connection connection = dataSource.getConnection();
                 PreparedStatement statement = connection.prepareStatement(FIND_BY_ID_QUERY)
         ) {
             statement.setInt(1, id);
@@ -118,7 +111,7 @@ public final class SessionDBRepository implements SessionRepository {
     public Optional<Session> add(Session session) {
         Optional<Session> result = Optional.empty();
         try (
-                Connection connection = pool.getConnection();
+                Connection connection = dataSource.getConnection();
                 PreparedStatement statement = connection.prepareStatement(
                         ADD_QUERY,
                         PreparedStatement.RETURN_GENERATED_KEYS
@@ -148,7 +141,7 @@ public final class SessionDBRepository implements SessionRepository {
     public boolean update(Session session) {
         boolean result = false;
         try (
-                Connection connection = pool.getConnection();
+                Connection connection = dataSource.getConnection();
                 PreparedStatement statement = connection.prepareStatement(UPDATE_QUERY)
         ) {
             statement.setString(1, session.getName());
@@ -170,7 +163,7 @@ public final class SessionDBRepository implements SessionRepository {
     public boolean delete(Session session) {
         boolean result = false;
         try (
-                Connection connection = pool.getConnection();
+                Connection connection = dataSource.getConnection();
                 PreparedStatement statement = connection.prepareStatement(DELETE_QUERY)
         ) {
             statement.setInt(1, session.getId());

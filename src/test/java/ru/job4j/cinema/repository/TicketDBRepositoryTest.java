@@ -1,6 +1,8 @@
 package ru.job4j.cinema.repository;
 
 import org.junit.jupiter.api.Test;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.boot.test.context.SpringBootTest;
 import ru.job4j.cinema.Main;
 import ru.job4j.cinema.model.Session;
 import ru.job4j.cinema.model.Ticket;
@@ -8,13 +10,20 @@ import ru.job4j.cinema.model.User;
 
 import static org.assertj.core.api.Assertions.assertThat;
 
+@SpringBootTest(classes = Main.class)
 public class TicketDBRepositoryTest {
+
+    @Autowired
+    private TicketRepository ticketRepository;
+
+    @Autowired
+    private UserRepository userRepository;
+
+    @Autowired
+    private SessionRepository sessionRepository;
 
     @Test
     public void whenCreateTicket() {
-        TicketRepository ticketRepository = new TicketDBRepository(new Main().loadPool());
-        UserRepository userRepository = new UserDBRepository(new Main().loadPool());
-        SessionRepository sessionRepository = new SessionDBRepository(new Main().loadPool());
         String name = String.valueOf(System.currentTimeMillis());
         User user = userRepository.add(new User(0, name, name, name, name)).orElse(null);
         Session session = sessionRepository.add(new Session(0, name)).orElse(null);
@@ -36,9 +45,6 @@ public class TicketDBRepositoryTest {
 
     @Test
     public void whenCreateDuplicateTicketThenAddResultIsEmpty() {
-        TicketRepository ticketRepository = new TicketDBRepository(new Main().loadPool());
-        UserRepository userRepository = new UserDBRepository(new Main().loadPool());
-        SessionRepository sessionRepository = new SessionDBRepository(new Main().loadPool());
         String name = String.valueOf(System.currentTimeMillis());
         User user = userRepository.add(new User(0, name, name, name, name)).orElse(null);
         Session session = sessionRepository.add(new Session(0, name)).orElse(null);
@@ -62,9 +68,6 @@ public class TicketDBRepositoryTest {
 
     @Test
     public void whenUpdateTicket() {
-        TicketRepository ticketRepository = new TicketDBRepository(new Main().loadPool());
-        UserRepository userRepository = new UserDBRepository(new Main().loadPool());
-        SessionRepository sessionRepository = new SessionDBRepository(new Main().loadPool());
         String name = String.valueOf(System.currentTimeMillis());
         User user = userRepository.add(new User(0, name, name, name, name)).orElse(null);
         Session session = sessionRepository.add(new Session(0, name)).orElse(null);
@@ -89,9 +92,6 @@ public class TicketDBRepositoryTest {
 
     @Test
     public void whenDeleteTicket() {
-        TicketRepository ticketRepository = new TicketDBRepository(new Main().loadPool());
-        SessionRepository sessionRepository = new SessionDBRepository(new Main().loadPool());
-        UserRepository userRepository = new UserDBRepository(new Main().loadPool());
         String name = String.valueOf(System.currentTimeMillis());
         Session session = sessionRepository.add(new Session(0, name)).orElse(null);
         User user = userRepository.add(new User(0, name, name, name, name)).orElse(null);
