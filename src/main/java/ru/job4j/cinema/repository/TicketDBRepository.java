@@ -3,7 +3,6 @@ package ru.job4j.cinema.repository;
 import net.jcip.annotations.ThreadSafe;
 import org.apache.log4j.LogManager;
 import org.apache.log4j.Logger;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Repository;
 import ru.job4j.cinema.model.Session;
 import ru.job4j.cinema.model.Ticket;
@@ -62,14 +61,22 @@ public final class TicketDBRepository implements TicketRepository {
 
     private static final Logger LOG = LogManager.getLogger(TicketRepository.class.getName());
 
-    @Autowired
-    private DataSource dataSource;
+    private final DataSource dataSource;
 
-    @Autowired
-    private UserRepository userRepository;
+    private final UserRepository userRepository;
 
-    @Autowired
-    private SessionRepository sessionRepository;
+    private final SessionRepository sessionRepository;
+
+    /**
+     * Конструктор для репозитория
+     *
+     * @param dataSource Пул подключений к БД
+     */
+    public TicketDBRepository(DataSource dataSource) {
+        this.dataSource = dataSource;
+        userRepository = new UserDBRepository(dataSource);
+        sessionRepository = new SessionDBRepository(dataSource);
+    }
 
     /**
      * Получить все записи для модели Ticket из БД

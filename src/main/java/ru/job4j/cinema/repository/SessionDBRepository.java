@@ -3,7 +3,6 @@ package ru.job4j.cinema.repository;
 import net.jcip.annotations.ThreadSafe;
 import org.apache.log4j.LogManager;
 import org.apache.log4j.Logger;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Repository;
 import ru.job4j.cinema.model.Session;
 
@@ -49,8 +48,16 @@ public final class SessionDBRepository implements SessionRepository {
 
     private static final Logger LOG = LogManager.getLogger(SessionRepository.class.getName());
 
-    @Autowired
-    private DataSource dataSource;
+    private final DataSource dataSource;
+
+    /**
+     * Конструктор для репозитория
+     *
+     * @param dataSource Пул подключений к БД
+     */
+    public SessionDBRepository(DataSource dataSource) {
+        this.dataSource = dataSource;
+    }
 
     /**
      * Получить все записи для модели Session из БД
