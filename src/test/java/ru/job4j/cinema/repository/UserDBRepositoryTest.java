@@ -3,12 +3,12 @@ package ru.job4j.cinema.repository;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
-import ru.job4j.cinema.Main;
+import ru.job4j.cinema.config.DataSourceConfig;
 import ru.job4j.cinema.model.User;
 
 import static org.assertj.core.api.Assertions.assertThat;
 
-@SpringBootTest(classes = Main.class)
+@SpringBootTest(classes = {DataSourceConfig.class, UserDBRepository.class})
 public class UserDBRepositoryTest {
 
     @Autowired
