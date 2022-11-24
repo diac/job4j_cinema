@@ -61,10 +61,6 @@ public final class TicketDBRepository implements TicketRepository {
 
     private final DataSource dataSource;
 
-    private final UserRepository userRepository;
-
-    private final SessionRepository sessionRepository;
-
     /**
      * Конструктор для репозитория
      *
@@ -72,8 +68,6 @@ public final class TicketDBRepository implements TicketRepository {
      */
     public TicketDBRepository(DataSource dataSource) {
         this.dataSource = dataSource;
-        userRepository = new UserDBRepository(dataSource);
-        sessionRepository = new SessionDBRepository(dataSource);
     }
 
     /**
