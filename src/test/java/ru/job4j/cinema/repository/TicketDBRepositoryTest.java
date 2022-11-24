@@ -29,18 +29,18 @@ public class TicketDBRepositoryTest {
         Session session = sessionRepository.add(new Session(0, name)).orElse(null);
         Ticket ticket = new Ticket(
                 0,
-                session,
+                session.getId(),
                 1,
                 1,
-                user
+                user.getId()
         );
         ticketRepository.add(ticket);
         Ticket ticketIndDb = ticketRepository.findById(ticket.getId())
-                .orElse(new Ticket(0, null, 0, 0, null));
+                .orElse(new Ticket(0, 0, 0, 0, 0));
         assertThat(ticketIndDb.getPosRow()).isEqualTo(ticket.getPosRow());
         assertThat(ticketIndDb.getCell()).isEqualTo(ticket.getCell());
-        assertThat(ticketIndDb.getUser()).isEqualTo(ticket.getUser());
-        assertThat(ticketIndDb.getSession()).isEqualTo(ticket.getSession());
+        assertThat(ticketIndDb.getUserId()).isEqualTo(ticket.getUserId());
+        assertThat(ticketIndDb.getSessionId()).isEqualTo(ticket.getSessionId());
     }
 
     @Test
@@ -50,18 +50,18 @@ public class TicketDBRepositoryTest {
         Session session = sessionRepository.add(new Session(0, name)).orElse(null);
         Ticket ticket = new Ticket(
                 0,
-                session,
+                session.getId(),
                 1,
                 1,
-                user
+                user.getId()
         );
         ticketRepository.add(ticket);
         Ticket duplicateTicket = new Ticket(
                 0,
-                ticket.getSession(),
+                ticket.getSessionId(),
                 ticket.getPosRow(),
                 ticket.getCell(),
-                ticket.getUser()
+                ticket.getUserId()
         );
         assertThat(ticketRepository.add(duplicateTicket)).isEmpty();
     }
@@ -73,21 +73,21 @@ public class TicketDBRepositoryTest {
         Session session = sessionRepository.add(new Session(0, name)).orElse(null);
         Ticket ticket = new Ticket(
                 0,
-                session,
+                session.getId(),
                 1,
                 1,
-                user
+                user.getId()
         );
         ticketRepository.add(ticket);
         ticket.setPosRow(5);
         ticket.setCell(5);
         ticketRepository.update(ticket);
         Ticket ticketIndDb = ticketRepository.findById(ticket.getId())
-                .orElse(new Ticket(0, null, 0, 0, null));
+                .orElse(new Ticket(0, 0, 0, 0, 0));
         assertThat(ticketIndDb.getPosRow()).isEqualTo(ticket.getPosRow());
         assertThat(ticketIndDb.getCell()).isEqualTo(ticket.getCell());
-        assertThat(ticketIndDb.getUser()).isEqualTo(ticket.getUser());
-        assertThat(ticketIndDb.getSession()).isEqualTo(ticket.getSession());
+        assertThat(ticketIndDb.getUserId()).isEqualTo(ticket.getUserId());
+        assertThat(ticketIndDb.getSessionId()).isEqualTo(ticket.getSessionId());
     }
 
     @Test
@@ -97,10 +97,10 @@ public class TicketDBRepositoryTest {
         User user = userRepository.add(new User(0, name, name, name, name)).orElse(null);
         Ticket ticket = new Ticket(
                 0,
-                session,
+                session.getId(),
                 0,
                 0,
-                user
+                user.getId()
         );
         ticketRepository.add(ticket);
         int ticketId = ticket.getId();

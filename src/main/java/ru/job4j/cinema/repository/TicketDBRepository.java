@@ -4,9 +4,7 @@ import net.jcip.annotations.ThreadSafe;
 import org.apache.log4j.LogManager;
 import org.apache.log4j.Logger;
 import org.springframework.stereotype.Repository;
-import ru.job4j.cinema.model.Session;
 import ru.job4j.cinema.model.Ticket;
-import ru.job4j.cinema.model.User;
 
 import javax.sql.DataSource;
 import java.sql.Connection;
@@ -143,10 +141,10 @@ public final class TicketDBRepository implements TicketRepository {
                         PreparedStatement.RETURN_GENERATED_KEYS
                 )
         ) {
-            statement.setInt(1, ticket.getSession().getId());
+            statement.setInt(1, ticket.getSessionId());
             statement.setInt(2, ticket.getPosRow());
             statement.setInt(3, ticket.getCell());
-            statement.setInt(4, ticket.getUser().getId());
+            statement.setInt(4, ticket.getUserId());
             statement.execute();
             try (ResultSet id = statement.getGeneratedKeys()) {
                 if (id.next()) {
@@ -173,10 +171,10 @@ public final class TicketDBRepository implements TicketRepository {
                 Connection connection = dataSource.getConnection();
                 PreparedStatement statement = connection.prepareStatement(UPDATE_QUERY)
         ) {
-            statement.setInt(1, ticket.getSession().getId());
+            statement.setInt(1, ticket.getSessionId());
             statement.setInt(2, ticket.getPosRow());
             statement.setInt(3, ticket.getCell());
-            statement.setInt(4, ticket.getUser().getId());
+            statement.setInt(4, ticket.getUserId());
             statement.setInt(5, ticket.getId());
             result = statement.executeUpdate() > 0;
         } catch (SQLException e) {
@@ -234,11 +232,10 @@ public final class TicketDBRepository implements TicketRepository {
     private Ticket ticketFromResultSet(ResultSet resultSet) throws SQLException {
         return new Ticket(
                 resultSet.getInt("id"),
-                sessionRepository.findById(resultSet.getInt("session_id")).orElse(new Session(0, null)),
+                resultSet.getInt("session_id"),
                 resultSet.getInt("pos_row"),
                 resultSet.getInt("cell"),
-                userRepository.findById(resultSet.getInt("user_id"))
-                        .orElse(new User(0, null, null, null, null))
+                resultSet.getInt("user_id")
         );
     }
 }

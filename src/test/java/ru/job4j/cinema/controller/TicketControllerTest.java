@@ -44,7 +44,7 @@ public class TicketControllerTest {
         TicketService ticketService = mock(SimpleTicketService.class);
         HallService hallService = mock(SimpleHallService.class);
         HttpServletRequest request = new MockHttpServletRequest();
-        Ticket ticket = new Ticket(0, new Session(), 0, 0, new User());
+        Ticket ticket = new Ticket(0, 0, 0, 0, 0);
         TicketController ticketController = new TicketController(ticketService, sessionService, hallService);
         String redirect = ticketController.selectSession(ticket, request);
         assertThat(
@@ -60,7 +60,8 @@ public class TicketControllerTest {
         HallService hallService = mock(SimpleHallService.class);
         HttpServletRequest request = new MockHttpServletRequest();
         HttpSession httpSession = request.getSession();
-        Ticket ticket = new Ticket(0, new Session(0, "Test session"), 0, 0, null);
+        Ticket ticket = new Ticket(0, 0, 0, 0, 0);
+        when(sessionService.findById(0)).thenReturn(Optional.of(new Session(0, "Test session")));
         httpSession.setAttribute("ticket", ticket);
         TicketController ticketController = new TicketController(ticketService, sessionService, hallService);
         Hall hall = new Hall(List.of(1, 2, 3));
@@ -78,7 +79,7 @@ public class TicketControllerTest {
         TicketService ticketService = mock(SimpleTicketService.class);
         HallService hallService = mock(SimpleHallService.class);
         HttpServletRequest request = new MockHttpServletRequest();
-        Ticket ticket = new Ticket(0, new Session(), 0, 0, new User());
+        Ticket ticket = new Ticket(0, 0, 0, 0, 0);
         HttpSession httpSession = request.getSession();
         httpSession.setAttribute("ticket", ticket);
         TicketController ticketController = new TicketController(ticketService, sessionService, hallService);
@@ -96,7 +97,7 @@ public class TicketControllerTest {
         RedirectAttributes redirectAttributes = mock(RedirectAttributes.class);
         Session session = new Session(0, "Test session");
         when(sessionService.findById(0)).thenReturn(Optional.of(session));
-        Ticket ticket = new Ticket(0, session, 0, 0, new User());
+        Ticket ticket = new Ticket(0, 0, 0, 0, 0);
         HttpSession httpSession = request.getSession();
         httpSession.setAttribute("ticket", ticket);
         httpSession.setAttribute("user", new User());
@@ -114,7 +115,7 @@ public class TicketControllerTest {
         HallService hallService = mock(SimpleHallService.class);
         HttpServletRequest request = new MockHttpServletRequest();
         RedirectAttributes redirectAttributes = mock(RedirectAttributes.class);
-        Ticket ticket = new Ticket(0, new Session(), 0, 0, new User());
+        Ticket ticket = new Ticket(0, 0, 0, 0, 0);
         HttpSession httpSession = request.getSession();
         httpSession.setAttribute("ticket", ticket);
         httpSession.setAttribute("user", new User());
@@ -134,7 +135,7 @@ public class TicketControllerTest {
         RedirectAttributes redirectAttributes = mock(RedirectAttributes.class);
         Session session = new Session(0, "Test session");
         when(sessionService.findById(0)).thenReturn(Optional.of(session));
-        Ticket ticket = new Ticket(0, session, 0, 0, new User());
+        Ticket ticket = new Ticket(0, 0, 0, 0, 0);
         httpSession.setAttribute("ticket", ticket);
         httpSession.setAttribute("user", new User());
         when(ticketService.add(ticket)).thenReturn(Optional.of(ticket));
@@ -153,7 +154,7 @@ public class TicketControllerTest {
         RedirectAttributes redirectAttributes = mock(RedirectAttributes.class);
         Session session = new Session(0, "Test session");
         when(sessionService.findById(0)).thenReturn(Optional.of(session));
-        Ticket ticket = new Ticket(0, session, 0, 0, new User());
+        Ticket ticket = new Ticket(0, 0, 0, 0, 0);
         httpSession.setAttribute("ticket", ticket);
         httpSession.setAttribute("user", new User());
         when(ticketService.add(ticket)).thenReturn(Optional.empty());
@@ -169,7 +170,7 @@ public class TicketControllerTest {
         HallService hallService = mock(SimpleHallService.class);
         HttpServletRequest request = new MockHttpServletRequest();
         HttpSession httpSession = request.getSession();
-        Ticket ticket = new Ticket(0, new Session(), 0, 0, new User());
+        Ticket ticket = new Ticket(0, 0, 0, 0, 0);
         httpSession.setAttribute("ticket", ticket);
         httpSession.setAttribute("user", new User());
         RedirectAttributes redirectAttributes = mock(RedirectAttributes.class);

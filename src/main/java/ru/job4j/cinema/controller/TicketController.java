@@ -50,10 +50,10 @@ public final class TicketController {
                 "ticket",
                 new Ticket(
                         0,
-                        new Session(ticket.getSession().getId(), null),
+                        ticket.getSessionId(),
                         0,
                         0,
-                        null
+                        ticket.getUserId()
                 )
         );
         return "redirect:/tickets/selectPlace";
@@ -66,7 +66,7 @@ public final class TicketController {
         Hall hall = hallService.getHall();
         model.addAttribute("ticket", ticket);
         model.addAttribute("hall", hall);
-        model.addAttribute("placesHelper", new PlacesHelper(ticket.getSession()));
+        model.addAttribute("placesHelper", new PlacesHelper(ticket.getSessionId()));
         return "tickets/selectPlace";
     }
 
@@ -120,7 +120,7 @@ public final class TicketController {
 
     private Ticket ticketFromHttpSession(HttpSession httpSession) throws IllegalArgumentException {
         Ticket sessionTicket = (Ticket) httpSession.getAttribute("ticket");
-        Optional<Session> session = Optional.ofNullable(sessionTicket.getSession());
+        Optional<Session> session = sessionService.findById(sessionTicket.getSessionId());
         int sessionId = 0;
         if (session.isPresent()) {
             sessionId = session.get().getId();
@@ -131,10 +131,10 @@ public final class TicketController {
         }
         return new Ticket(
                 0,
-                session.get(),
+                sessionId,
                 sessionTicket.getPosRow(),
                 sessionTicket.getCell(),
-                ((User) httpSession.getAttribute("user"))
+                ((User) httpSession.getAttribute("user")).getId()
         );
     }
 
@@ -145,11 +145,12 @@ public final class TicketController {
 
         private final Set<Place> occupiedPlaces = new HashSet();
 
-        public PlacesHelper(Session session) {
-            if (session == null) {
+        public PlacesHelper(int sessionId) {
+            Optional<Session> session = sessionService.findById(sessionId);
+            if (session.isEmpty()) {
                 throw new IllegalArgumentException("Сеанс не может быть null");
             }
-            List<Ticket> tickets = ticketService.findAllBySessionId(session.getId());
+            List<Ticket> tickets = ticketService.findAllBySessionId(sessionId);
             tickets.forEach(
                     ticket -> occupiedPlaces.add(new Place(ticket.getPosRow(), ticket.getCell()))
             );
