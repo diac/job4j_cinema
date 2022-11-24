@@ -8,7 +8,7 @@ import java.util.List;
 
 @Service
 @ThreadSafe
-public  class HallRepositoryService implements HallService {
+public  class SimpleHallService implements HallService {
 
     public Hall getHall() {
         return new Hall(List.of(5, 10, 5, 12, 12));

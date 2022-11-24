@@ -28,9 +28,9 @@ public class TicketControllerTest {
                 new Session(1, "Movie #2")
         );
         Model model = mock(Model.class);
-        SessionService sessionService = mock(SessionRepositoryService.class);
-        TicketService ticketService = mock(TicketRepositoryService.class);
-        HallService hallService = mock(HallRepositoryService.class);
+        SessionService sessionService = mock(SimpleSessionService.class);
+        TicketService ticketService = mock(SimpleTicketService.class);
+        HallService hallService = mock(SimpleHallService.class);
         when(sessionService.findAll()).thenReturn(sessions);
         TicketController ticketController = new TicketController(ticketService, sessionService, hallService);
         String page = ticketController.selectSessionPage(model);
@@ -40,9 +40,9 @@ public class TicketControllerTest {
 
     @Test
     public void whenSelectSession() {
-        SessionService sessionService = mock(SessionRepositoryService.class);
-        TicketService ticketService = mock(TicketRepositoryService.class);
-        HallService hallService = mock(HallRepositoryService.class);
+        SessionService sessionService = mock(SimpleSessionService.class);
+        TicketService ticketService = mock(SimpleTicketService.class);
+        HallService hallService = mock(SimpleHallService.class);
         HttpServletRequest request = new MockHttpServletRequest();
         Ticket ticket = new Ticket(0, new Session(), 0, 0, new User());
         TicketController ticketController = new TicketController(ticketService, sessionService, hallService);
@@ -55,9 +55,9 @@ public class TicketControllerTest {
 
     @Test
     public void whenSelectPlacePage() {
-        SessionService sessionService = mock(SessionRepositoryService.class);
-        TicketService ticketService = mock(TicketRepositoryService.class);
-        HallService hallService = mock(HallRepositoryService.class);
+        SessionService sessionService = mock(SimpleSessionService.class);
+        TicketService ticketService = mock(SimpleTicketService.class);
+        HallService hallService = mock(SimpleHallService.class);
         HttpServletRequest request = new MockHttpServletRequest();
         HttpSession httpSession = request.getSession();
         Ticket ticket = new Ticket(0, new Session(0, "Test session"), 0, 0, null);
@@ -74,9 +74,9 @@ public class TicketControllerTest {
 
     @Test
     public void whenSelectPlace() {
-        SessionService sessionService = mock(SessionRepositoryService.class);
-        TicketService ticketService = mock(TicketRepositoryService.class);
-        HallService hallService = mock(HallRepositoryService.class);
+        SessionService sessionService = mock(SimpleSessionService.class);
+        TicketService ticketService = mock(SimpleTicketService.class);
+        HallService hallService = mock(SimpleHallService.class);
         HttpServletRequest request = new MockHttpServletRequest();
         Ticket ticket = new Ticket(0, new Session(), 0, 0, new User());
         HttpSession httpSession = request.getSession();
@@ -89,9 +89,9 @@ public class TicketControllerTest {
 
     @Test
     public void whenReviewPage() {
-        SessionService sessionService = mock(SessionRepositoryService.class);
-        TicketService ticketService = mock(TicketRepositoryService.class);
-        HallService hallService = mock(HallRepositoryService.class);
+        SessionService sessionService = mock(SimpleSessionService.class);
+        TicketService ticketService = mock(SimpleTicketService.class);
+        HallService hallService = mock(SimpleHallService.class);
         HttpServletRequest request = new MockHttpServletRequest();
         RedirectAttributes redirectAttributes = mock(RedirectAttributes.class);
         Session session = new Session(0, "Test session");
@@ -109,9 +109,9 @@ public class TicketControllerTest {
 
     @Test
     public void whenReviewPageAndSessionDoesNotExistThenRedirect() {
-        SessionService sessionService = mock(SessionRepositoryService.class);
-        TicketService ticketService = mock(TicketRepositoryService.class);
-        HallService hallService = mock(HallRepositoryService.class);
+        SessionService sessionService = mock(SimpleSessionService.class);
+        TicketService ticketService = mock(SimpleTicketService.class);
+        HallService hallService = mock(SimpleHallService.class);
         HttpServletRequest request = new MockHttpServletRequest();
         RedirectAttributes redirectAttributes = mock(RedirectAttributes.class);
         Ticket ticket = new Ticket(0, new Session(), 0, 0, new User());
@@ -126,9 +126,9 @@ public class TicketControllerTest {
 
     @Test
     public void whenPlaceOrder() {
-        SessionService sessionService = mock(SessionRepositoryService.class);
-        TicketService ticketService = mock(TicketRepositoryService.class);
-        HallService hallService = mock(HallRepositoryService.class);
+        SessionService sessionService = mock(SimpleSessionService.class);
+        TicketService ticketService = mock(SimpleTicketService.class);
+        HallService hallService = mock(SimpleHallService.class);
         HttpServletRequest request = new MockHttpServletRequest();
         HttpSession httpSession = request.getSession();
         RedirectAttributes redirectAttributes = mock(RedirectAttributes.class);
@@ -145,9 +145,9 @@ public class TicketControllerTest {
 
     @Test
     public void whenPlaceOrderFail() {
-        SessionService sessionService = mock(SessionRepositoryService.class);
-        TicketService ticketService = mock(TicketRepositoryService.class);
-        HallService hallService = mock(HallRepositoryService.class);
+        SessionService sessionService = mock(SimpleSessionService.class);
+        TicketService ticketService = mock(SimpleTicketService.class);
+        HallService hallService = mock(SimpleHallService.class);
         HttpServletRequest request = new MockHttpServletRequest();
         HttpSession httpSession = request.getSession();
         RedirectAttributes redirectAttributes = mock(RedirectAttributes.class);
@@ -164,9 +164,9 @@ public class TicketControllerTest {
 
     @Test
     public void whenCancelOrder() {
-        SessionService sessionService = mock(SessionRepositoryService.class);
-        TicketService ticketService = mock(TicketRepositoryService.class);
-        HallService hallService = mock(HallRepositoryService.class);
+        SessionService sessionService = mock(SimpleSessionService.class);
+        TicketService ticketService = mock(SimpleTicketService.class);
+        HallService hallService = mock(SimpleHallService.class);
         HttpServletRequest request = new MockHttpServletRequest();
         HttpSession httpSession = request.getSession();
         Ticket ticket = new Ticket(0, new Session(), 0, 0, new User());

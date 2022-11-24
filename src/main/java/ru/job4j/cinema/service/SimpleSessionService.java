@@ -13,7 +13,7 @@ import java.util.Optional;
  */
 @Service
 @ThreadSafe
-public class SessionRepositoryService implements SessionService {
+public class SimpleSessionService implements SessionService {
 
     private final SessionRepository repository;
 
@@ -22,7 +22,7 @@ public class SessionRepositoryService implements SessionService {
      *
      * @param repository Объект-репозиторий
      */
-    public SessionRepositoryService(SessionRepository repository) {
+    public SimpleSessionService(SessionRepository repository) {
         this.repository = repository;
     }
 

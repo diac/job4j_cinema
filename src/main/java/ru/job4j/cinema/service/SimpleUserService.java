@@ -13,7 +13,7 @@ import java.util.Optional;
  */
 @Service
 @ThreadSafe
-public class UserRepositoryService implements UserService {
+public class SimpleUserService implements UserService {
 
     private final UserRepository repository;
 
@@ -22,7 +22,7 @@ public class UserRepositoryService implements UserService {
      *
      * @param repository Объект-репозиторий
      */
-    public UserRepositoryService(UserRepository repository) {
+    public SimpleUserService(UserRepository repository) {
         this.repository = repository;
     }
 

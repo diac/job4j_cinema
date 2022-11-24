@@ -13,7 +13,7 @@ import java.util.Optional;
  */
 @Service
 @ThreadSafe
-public class TicketRepositoryService implements TicketService {
+public class SimpleTicketService implements TicketService {
 
     private final TicketRepository repository;
 
@@ -22,7 +22,7 @@ public class TicketRepositoryService implements TicketService {
      *
      * @param repository Объект-репозиторий
      */
-    public TicketRepositoryService(TicketRepository repository) {
+    public SimpleTicketService(TicketRepository repository) {
         this.repository = repository;
     }
 
