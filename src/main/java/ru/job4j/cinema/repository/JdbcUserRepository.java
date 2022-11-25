@@ -20,7 +20,7 @@ import java.util.Optional;
  */
 @Repository
 @ThreadSafe
-public final class UserDBRepository implements UserRepository {
+public final class JdbcUserRepository implements UserRepository {
 
     private static final String FIND_ALL_QUERY = "SELECT * FROM users;";
 
@@ -54,7 +54,7 @@ public final class UserDBRepository implements UserRepository {
     private static final String FIND_BY_USERNAME_AND_PASSWORD_QUERY =
             "SELECT * FROM users WHERE username = ? AND password = ?;";
 
-    private static final Logger LOG = LogManager.getLogger(UserDBRepository.class.getName());
+    private static final Logger LOG = LogManager.getLogger(JdbcUserRepository.class.getName());
 
     private final DataSource dataSource;
 
@@ -63,7 +63,7 @@ public final class UserDBRepository implements UserRepository {
      *
      * @param dataSource Пул подключений к БД
      */
-    public UserDBRepository(DataSource dataSource) {
+    public JdbcUserRepository(DataSource dataSource) {
         this.dataSource = dataSource;
     }
 

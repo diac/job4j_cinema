@@ -8,8 +8,8 @@ import ru.job4j.cinema.model.Session;
 
 import static org.assertj.core.api.Assertions.assertThat;
 
-@SpringBootTest(classes = {DataSourceConfig.class, SessionDBRepository.class})
-public class SessionDBRepositoryTest {
+@SpringBootTest(classes = {DataSourceConfig.class, JdbcSessionRepository.class})
+public class JdbcSessionRepositoryTest {
 
     @Autowired
     private SessionRepository repository;

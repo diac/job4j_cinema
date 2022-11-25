@@ -20,7 +20,7 @@ import java.util.Optional;
  */
 @Repository
 @ThreadSafe
-public final class TicketDBRepository implements TicketRepository {
+public final class JdbcTicketRepository implements TicketRepository {
 
     private static final String FIND_ALL_QUERY = "SELECT * FROM ticket;";
 
@@ -66,7 +66,7 @@ public final class TicketDBRepository implements TicketRepository {
      *
      * @param dataSource Пул подключений к БД
      */
-    public TicketDBRepository(DataSource dataSource) {
+    public JdbcTicketRepository(DataSource dataSource) {
         this.dataSource = dataSource;
     }
 

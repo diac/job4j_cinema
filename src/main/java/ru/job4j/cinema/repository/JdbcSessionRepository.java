@@ -20,7 +20,7 @@ import java.util.Optional;
  */
 @Repository
 @ThreadSafe
-public final class SessionDBRepository implements SessionRepository {
+public final class JdbcSessionRepository implements SessionRepository {
 
     private static final String FIND_ALL_QUERY = "SELECT * FROM sessions;";
 
@@ -55,7 +55,7 @@ public final class SessionDBRepository implements SessionRepository {
      *
      * @param dataSource Пул подключений к БД
      */
-    public SessionDBRepository(DataSource dataSource) {
+    public JdbcSessionRepository(DataSource dataSource) {
         this.dataSource = dataSource;
     }
 

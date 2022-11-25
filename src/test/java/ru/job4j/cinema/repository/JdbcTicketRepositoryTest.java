@@ -10,8 +10,8 @@ import ru.job4j.cinema.model.User;
 
 import static org.assertj.core.api.Assertions.assertThat;
 
-@SpringBootTest(classes = {DataSourceConfig.class, TicketDBRepository.class, UserDBRepository.class, SessionDBRepository.class})
-public class TicketDBRepositoryTest {
+@SpringBootTest(classes = {DataSourceConfig.class, JdbcTicketRepository.class, JdbcUserRepository.class, JdbcSessionRepository.class})
+public class JdbcTicketRepositoryTest {
 
     @Autowired
     private TicketRepository ticketRepository;
