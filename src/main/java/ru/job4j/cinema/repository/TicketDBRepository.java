@@ -120,7 +120,7 @@ public final class TicketDBRepository implements TicketRepository {
     /**
      * Добавить новую запись в БД из объекта Ticket
      *
-     * @param ticket Optional объекта Ticket, из которого создается новая запись в БД
+     * @param ticket Объект Ticket, из которого создается новая запись в БД
      * @return <span>Optional объекта Ticket, соответствующего новой созданной записи в БД.
      * Optional.empty() в случае, если новую запись не удалось создать (напр., из-за нарушения
      * ссылочной целостности)</span>
