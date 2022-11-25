@@ -14,7 +14,7 @@
         <form method="post" th:action="@{/}">
             <div class="form-group">
                 <label for="sessionId">Фильм</label>
-                <select class="form-control" id="sessionId" name="session.id" required>
+                <select class="form-control" id="sessionId" name="sessionId" required>
                     <option th:each="movieSession : ${sessions}" th:value="${movieSession.id}"
                             th:text="${movieSession.name}"></option>
                 </select>

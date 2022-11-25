@@ -27,7 +27,7 @@
                                 method="post"
                                 th:action="@{/tickets/selectPlace}"
                         >
-                            <input type="hidden" name="session.id" th:value="${ticket.getSession.getId()}">
+                            <input type="hidden" name="sessionId" th:value="${ticket.getSessionId()}">
                             <input type="hidden" name="posRow" th:value="${row}">
                             <input type="hidden" name="cell" th:value="${place}">
                             <button type="submit" th:text="${place}" th:title="'Ряд ' + ${row} + ', место ' + ${place}"></button>

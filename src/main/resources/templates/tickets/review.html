@@ -6,7 +6,11 @@
     <nav th:replace="fragments/navbar :: navbarMain"></nav>
     <h1>Подтверждение заказа</h1>
     <div>
-        <div>Сеанс: <span th:text="${ticket.getSession().getName()}"></span></div>
+        <div
+                th:if="${session != null}"
+        >
+            Сеанс: <span th:text="${ticketSession.getName()}"></span>
+        </div>
         <div>Ряд: <span th:text="${ticket.getPosRow()}"></span></div>
         <div>Место: <span th:text="${ticket.getCell()}"></span></div>
         <div class="controls">

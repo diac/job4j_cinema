@@ -81,7 +81,9 @@ public final class TicketController {
     public String reviewPage(Model model, HttpServletRequest req, RedirectAttributes redirectAttributes) {
         try {
             Ticket ticket = ticketFromHttpSession(req.getSession());
+            Session session = sessionService.findById(ticket.getSessionId()).orElse(null);
             model.addAttribute("ticket", ticket);
+            model.addAttribute("ticketSession", session);
             return "tickets/review";
         } catch (IllegalArgumentException e) {
             redirectAttributes.addFlashAttribute("errorMessage", e.getMessage());
