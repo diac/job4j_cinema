@@ -8,7 +8,7 @@ import java.util.HashSet;
 import java.util.List;
 import java.util.Optional;
 import java.util.Set;
-import java.util.function.BiFunction;
+import java.util.function.BiPredicate;
 
 /**
  * Сервис, осуществляющий доступ к данным объектов модели Ticket в репозитории
@@ -94,7 +94,7 @@ public class SimpleTicketService implements TicketService {
      * @return Бинарная функция от номера ряда и номера места в ряду, возвращающая true,
      * если указанное место на сеансе еще не занято; иначе, возвращает false
      */
-    public BiFunction<Integer, Integer, Boolean> placesHelper(int sessionId) {
+    public BiPredicate<Integer, Integer> placesHelper(int sessionId) {
         record Place(int row, int place) {
         }
         Set<Place> occupiedPlaces = new HashSet<>();

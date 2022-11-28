@@ -4,7 +4,7 @@ import ru.job4j.cinema.model.Ticket;
 
 import java.util.List;
 import java.util.Optional;
-import java.util.function.BiFunction;
+import java.util.function.BiPredicate;
 
 public interface TicketService {
 
@@ -20,5 +20,5 @@ public interface TicketService {
 
     boolean delete(Ticket ticket);
 
-    BiFunction<Integer, Integer, Boolean> placesHelper(int sessionId);
+    BiPredicate<Integer, Integer> placesHelper(int sessionId);
 }
