@@ -79,13 +79,17 @@ public final class TicketController {
     public String reviewPage(Model model, HttpServletRequest req, RedirectAttributes redirectAttributes) {
         try {
             Ticket ticket = ticketFromHttpSession(req.getSession());
-            Session session = sessionService.findById(ticket.getSessionId()).orElse(null);
+            Optional<Session> session = sessionService.findById(ticket.getSessionId());
+            if (session.isEmpty()) {
+                redirectAttributes.addFlashAttribute("errorMessage", "Выбранный сеанс не существует");
+                return "redirect:/error/404";
+            }
             model.addAttribute("ticket", ticket);
-            model.addAttribute("ticketSession", session);
+            model.addAttribute("ticketSession", session.get());
             return "tickets/review";
         } catch (IllegalArgumentException e) {
             redirectAttributes.addFlashAttribute("errorMessage", e.getMessage());
-            return "redirect:/";
+            return "redirect:/error/404";
         }
     }
 
@@ -103,6 +107,7 @@ public final class TicketController {
             redirectAttributes.addFlashAttribute("successMessage", "Место забронировано");
         } catch (IllegalArgumentException e) {
             redirectAttributes.addFlashAttribute("errorMessage", e.getMessage());
+            return "redirect:/error/404";
         }
         return "redirect:/";
     }
@@ -124,9 +129,7 @@ public final class TicketController {
         int sessionId = 0;
         if (session.isPresent()) {
             sessionId = session.get().getId();
-            session = sessionService.findById(sessionId);
-        }
-        if (session.isEmpty()) {
+        } else {
             throw (new IllegalArgumentException(String.format("Сеанс #%d не существует", sessionId)));
         }
         return new Ticket(

@@ -1,0 +1,17 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head th:replace="fragments/head :: htmlHead"></head>
+<body>
+<div class="container">
+    <nav th:replace="fragments/navbar :: navbarMain"></nav>
+    <div class="alert alert-danger">
+        <h1>Не найдено</h1>
+        <div
+                th:if="${errorMessage != null}"
+                th:text="${errorMessage}"
+                class="alert alert-danger"
+        ></div>
+    </div>
+</div>
+</body>
+</html>

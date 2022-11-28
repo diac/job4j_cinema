@@ -14,7 +14,7 @@ public class AuthFilter implements Filter {
 
     private static final Pattern ALLOWED_STATIC = Pattern.compile(".+\\.(js|css)$");
 
-    private static final Set<String> ALLOWED_MAPPINGS = Set.of("login");
+    private static final Set<String> ALLOWED_MAPPINGS = Set.of("login", "error/404");
 
     @Override
     public void doFilter(
