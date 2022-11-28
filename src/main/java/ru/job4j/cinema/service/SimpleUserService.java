@@ -1,6 +1,5 @@
 package ru.job4j.cinema.service;
 
-import net.jcip.annotations.ThreadSafe;
 import org.springframework.stereotype.Service;
 import ru.job4j.cinema.model.User;
 import ru.job4j.cinema.repository.UserRepository;
@@ -12,7 +11,6 @@ import java.util.Optional;
  * Сервис, осуществляющий доступ к данным объектов модели User в репозитории
  */
 @Service
-@ThreadSafe
 public class SimpleUserService implements UserService {
 
     private final UserRepository repository;

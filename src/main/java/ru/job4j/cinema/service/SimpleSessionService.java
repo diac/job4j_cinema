@@ -1,6 +1,5 @@
 package ru.job4j.cinema.service;
 
-import net.jcip.annotations.ThreadSafe;
 import org.springframework.stereotype.Service;
 import ru.job4j.cinema.model.Session;
 import ru.job4j.cinema.repository.SessionRepository;
@@ -12,7 +11,6 @@ import java.util.Optional;
  * Сервис, осуществляющий доступ к данным объектов модели Service в репозитории
  */
 @Service
-@ThreadSafe
 public class SimpleSessionService implements SessionService {
 
     private final SessionRepository repository;

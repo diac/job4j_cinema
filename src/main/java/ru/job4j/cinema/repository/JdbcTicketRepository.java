@@ -1,6 +1,5 @@
 package ru.job4j.cinema.repository;
 
-import net.jcip.annotations.ThreadSafe;
 import org.apache.log4j.LogManager;
 import org.apache.log4j.Logger;
 import org.springframework.stereotype.Repository;
@@ -19,7 +18,6 @@ import java.util.Optional;
  * Репозиторий, отвечающий за сериализацию/десериализацию объектов модели Ticket в БД
  */
 @Repository
-@ThreadSafe
 public final class JdbcTicketRepository implements TicketRepository {
 
     private static final String FIND_ALL_QUERY = "SELECT * FROM ticket;";

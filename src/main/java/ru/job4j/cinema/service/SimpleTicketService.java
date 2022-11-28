@@ -1,6 +1,5 @@
 package ru.job4j.cinema.service;
 
-import net.jcip.annotations.ThreadSafe;
 import org.springframework.stereotype.Service;
 import ru.job4j.cinema.model.Ticket;
 import ru.job4j.cinema.repository.TicketRepository;
@@ -15,7 +14,6 @@ import java.util.function.BiFunction;
  * Сервис, осуществляющий доступ к данным объектов модели Ticket в репозитории
  */
 @Service
-@ThreadSafe
 public class SimpleTicketService implements TicketService {
 
     private final TicketRepository repository;
