@@ -23,7 +23,7 @@
                             class="place"
                     >
                         <form
-                                th:if="${placesHelper.placeIsAvailable(row, place)}"
+                                th:if="${placesHelper.apply(row, place)}"
                                 method="post"
                                 th:action="@{/tickets/selectPlace}"
                         >
@@ -34,7 +34,7 @@
                         </form>
 
                         <div
-                                th:if="${!placesHelper.placeIsAvailable(row, place)}"
+                                th:if="${!placesHelper.apply(row, place)}"
                                 class="place-unavailable"
                         >
                             <button type="button" disabled th:text="${place}" title="Место занято"></button>

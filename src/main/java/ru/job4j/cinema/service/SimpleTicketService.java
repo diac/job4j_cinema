@@ -5,8 +5,11 @@ import org.springframework.stereotype.Service;
 import ru.job4j.cinema.model.Ticket;
 import ru.job4j.cinema.repository.TicketRepository;
 
+import java.util.HashSet;
 import java.util.List;
 import java.util.Optional;
+import java.util.Set;
+import java.util.function.BiFunction;
 
 /**
  * Сервис, осуществляющий доступ к данным объектов модели Ticket в репозитории
@@ -84,5 +87,23 @@ public class SimpleTicketService implements TicketService {
      */
     public boolean delete(Ticket ticket) {
         return repository.delete(ticket);
+    }
+
+    /**
+     * Хелпер, позволяющий определить, свободно ли конкретное место в рамках указанного сеанса
+     *
+     * @param sessionId Идентификатор сеанса
+     * @return Бинарная функция от номера ряда и номера места в ряду, возвращающая true,
+     * если указанное место на сеансе еще не занято; иначе, возвращает false
+     */
+    public BiFunction<Integer, Integer, Boolean> placesHelper(int sessionId) {
+        record Place(int row, int place) {
+        }
+        Set<Place> occupiedPlaces = new HashSet<>();
+        List<Ticket> tickets = findAllBySessionId(sessionId);
+        tickets.forEach(
+                ticket -> occupiedPlaces.add(new Place(ticket.getPosRow(), ticket.getCell()))
+        );
+        return (posRow, cell) -> !occupiedPlaces.contains(new Place(posRow, cell));
     }
 }

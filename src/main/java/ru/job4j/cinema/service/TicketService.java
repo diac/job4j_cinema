@@ -4,6 +4,7 @@ import ru.job4j.cinema.model.Ticket;
 
 import java.util.List;
 import java.util.Optional;
+import java.util.function.BiFunction;
 
 public interface TicketService {
 
@@ -18,4 +19,6 @@ public interface TicketService {
     List<Ticket> findAllBySessionId(int sessionId);
 
     boolean delete(Ticket ticket);
+
+    BiFunction<Integer, Integer, Boolean> placesHelper(int sessionId);
 }
