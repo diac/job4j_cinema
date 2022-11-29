@@ -137,7 +137,7 @@ public final class JdbcSessionRepository implements SessionRepository {
     }
 
     /**
-     * Обновить в БД запись, соотвутетсвующую передаваемому объекту Session
+     * Обновить в БД запись, соответсвующую передаваемому объекту Session
      *
      * @param session Объект Session, для которого необходимо обновить запись в БД
      * @return true в случае успешного обновления. Иначе -- false
