@@ -8,7 +8,10 @@ import java.util.List;
 import java.util.Optional;
 
 /**
- * Сервис, осуществляющий доступ к данным объектов модели Service в репозитории
+ * Сервис, осуществляющий доступ к данным объектов модели Session в репозитории
+ *
+ * @see ru.job4j.cinema.model.Session
+ * @see ru.job4j.cinema.repository.SessionRepository
  */
 @Service
 public class SimpleSessionService implements SessionService {

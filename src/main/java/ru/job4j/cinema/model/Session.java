@@ -2,9 +2,19 @@ package ru.job4j.cinema.model;
 
 import java.util.Objects;
 
+/**
+ * Модель данных сеансов
+ */
 public class Session {
 
+    /**
+     * Идентификатор сеанса
+     */
     private int id;
+
+    /**
+     * Имя сеанса
+     */
     private String name;
 
     public Session() {

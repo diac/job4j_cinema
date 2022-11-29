@@ -16,6 +16,9 @@ import java.util.function.BiPredicate;
  * Данный класс является потокобезопасным. Потенциальная проблема с многопоточностью в методе add(),
  * т.е. проблема одновременной покупки разных билетов на одно и то же место, решается на уровне БД
  * путем использования ограничения уникальности.
+ *
+ * @see ru.job4j.cinema.model.Ticket
+ * @see ru.job4j.cinema.repository.TicketRepository
  */
 @Service
 @ThreadSafe
@@ -97,7 +100,7 @@ public class SimpleTicketService implements TicketService {
      *
      * @param sessionId Идентификатор сеанса
      * @return Бинарный предикат от номера ряда и номера места в ряду, возвращающий true,
-     * если указанное место на сеансе еще не занято; иначе, возвращает false
+     * если указанное место на сеансе еще не занято; иначе, предикат возвращает false
      */
     public BiPredicate<Integer, Integer> placesHelper(int sessionId) {
         record Place(int row, int place) {

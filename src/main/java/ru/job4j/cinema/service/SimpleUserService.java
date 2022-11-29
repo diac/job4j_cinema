@@ -9,6 +9,9 @@ import java.util.Optional;
 
 /**
  * Сервис, осуществляющий доступ к данным объектов модели User в репозитории
+ *
+ * @see ru.job4j.cinema.model.User
+ * @see ru.job4j.cinema.repository.UserRepository
  */
 @Service
 public class SimpleUserService implements UserService {

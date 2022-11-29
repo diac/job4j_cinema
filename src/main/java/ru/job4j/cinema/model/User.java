@@ -2,12 +2,34 @@ package ru.job4j.cinema.model;
 
 import java.util.Objects;
 
+/**
+ * Модель данных пользователя системы
+ */
 public class User {
 
+    /**
+     * Идентификатор пользователя
+     */
     private int id;
+
+    /**
+     * Имя пользователя в системе
+     */
     private String username;
+
+    /**
+     * Пароль пользователя в системе
+     */
     private String password;
+
+    /**
+     * email пользователя
+     */
     private String email;
+
+    /**
+     * Телефонный номер пользователя
+     */
     private String phone;
 
     public User() {
