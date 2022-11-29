@@ -122,7 +122,7 @@ public class TicketControllerTest {
         Model model = mock(Model.class);
         TicketController ticketController = new TicketController(ticketService, sessionService, hallService);
         String redirect = ticketController.reviewPage(model, request, redirectAttributes);
-        assertThat(redirect).isEqualTo("redirect:/");
+        assertThat(redirect).isEqualTo("redirect:/error/404");
     }
 
     @Test
