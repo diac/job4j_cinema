@@ -91,7 +91,7 @@ public class SimpleTicketService implements TicketService {
      * Хелпер, позволяющий определить, свободно ли конкретное место в рамках указанного сеанса
      *
      * @param sessionId Идентификатор сеанса
-     * @return Бинарная функция от номера ряда и номера места в ряду, возвращающая true,
+     * @return Бинарный предикат от номера ряда и номера места в ряду, возвращающий true,
      * если указанное место на сеансе еще не занято; иначе, возвращает false
      */
     public BiPredicate<Integer, Integer> placesHelper(int sessionId) {
