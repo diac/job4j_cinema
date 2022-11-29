@@ -1,5 +1,6 @@
 package ru.job4j.cinema.service;
 
+import net.jcip.annotations.ThreadSafe;
 import org.springframework.stereotype.Service;
 import ru.job4j.cinema.model.Ticket;
 import ru.job4j.cinema.repository.TicketRepository;
@@ -11,9 +12,13 @@ import java.util.Set;
 import java.util.function.BiPredicate;
 
 /**
- * Сервис, осуществляющий доступ к данным объектов модели Ticket в репозитории
+ * Сервис, осуществляющий доступ к данным объектов модели Ticket в репозитории.<br>
+ * Данный класс является потокобезопасным. Потенциальная проблема с многопоточностью в методе add(),
+ * т.е. проблема одновременной покупки разных билетов на одно и то же место, решается на уровне БД
+ * путем использования ограничения уникальности.
  */
 @Service
+@ThreadSafe
 public class SimpleTicketService implements TicketService {
 
     private final TicketRepository repository;
